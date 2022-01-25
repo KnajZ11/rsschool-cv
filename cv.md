@@ -1,8 +1,8 @@
-Andrei Radivilko
-knajz11@gmail.com; +375(29) 303-99-28
-There are no skills in development yet, but I want to learn and learn new things
-Programming skills so far are only those that gave me RSScool
-function lib() {
+1.Andrei Radivilko;
+2.knajz11@gmail.com; +375(29) 303-99-28;
+3.There are no skills in development yet, but I want to learn and learn new things;
+4.Programming skills so far are only those that gave me RSScool;
+5.function lib() {
         var _windowContainer = null,
         _guid = null,
         _poll = this,
@@ -35,6 +35,6 @@ function lib() {
             }.bind(this));
         }
 
-No experience in Junior Dev
-Graduated from the university. Belarusian State University of Transport. Faculty of mechanics. Specialty: Traction rolling stock of railway transport
-Worked with an English tutor
+6.No experience in Junior Dev;
+7.Graduated from the university. Belarusian State University of Transport. Faculty of mechanics. Specialty: Traction rolling stock of railway transport;
+8.Worked with an English tutor;
