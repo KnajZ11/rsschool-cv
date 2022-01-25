@@ -2,13 +2,7 @@
 2.knajz11@gmail.com; +375(29) 303-99-28;
 3.There are no skills in development yet, but I want to learn and learn new things;
 4.Programming skills so far are only those that gave me RSScool;
-5.function lib() {
-        var _windowContainer = null,
-        _guid = null,
-        _poll = this,
-        _name = '',
-        _store = null;
-
+5.
         var header, panel;
 
         var save = function(){ //Функция сохранения изменений в анкете
