@@ -14,21 +14,7 @@
                 $.each(rec.modified, function(name){
                     modifyData += '&values['+index+']['+name+']=' + rec.data[name];
                 });
-                modifyData += '&id['+index+']=' + rec.id;
-            });
-            if (modifyData == '') return;
-                $.getJSON('./modules/units/units.php?action=SET_FORMDATA&pharmId='+panel.container['form'].pharmId+'&projectId='+_param.projectId+'&stageId='+_param.stageId + modifyData +'&rnd='+Math.random(), function(data){
-                if (!data || !data.result){
-                    alert('ошибка сохранения, попробуйте еще раз');
-                    //_store.rejectChanges();
-                }else if (data.result == true){
-                    _store.commitChanges();
-                    panel.container['form'].loadData(panel.container['form'].pharmId);
-                }
-                $.unblockUI();
-            }.bind(this));
-        }
-
+                
 6.No experience in Junior Dev;
 7.Graduated from the university. Belarusian State University of Transport. Faculty of mechanics. Specialty: Traction rolling stock of railway transport;
 8.Worked with an English tutor;
