@@ -13,7 +13,7 @@
             $.each(_store.getModifiedRecords(), function(index, rec){
                 $.each(rec.modified, function(name){
                     modifyData += '&values['+index+']['+name+']=' + rec.data[name];
-                });
+                })
                 
 6.No experience in Junior Dev;
 7.Graduated from the university. Belarusian State University of Transport. Faculty of mechanics. Specialty: Traction rolling stock of railway transport;
