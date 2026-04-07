@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рождественский магазин - Главная</title>
+    <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="./styles/home.css">
+    <link rel="stylesheet" href="./styles/gifts.css">
+   <!-- В секцию head обоих HTML-файлов можно добавить в качестве альтернативы -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://w3.org🎄%3C/text%3E%3C/svg%3E">
+    <!-- Подключение шрифтов из Figma -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- HTML код -->
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index-cs.html" class="logo">
+                    <img src="./assets/images/Logo.svg" alt="Рождественский Магазин">
+                </a>
+                
+                <nav class="nav">
+                    <a href="index-cs.html" class="nav-link active">Главная</a>
+                    <a href="#about" class="nav-link">О нас</a>
+                    <a href="#gifts" class="nav-link">Подарки</a>
+                    <a href="#contact" class="nav-link">Контакты</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <button class="icon-btn cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+        <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Рождественское Волшебство</h1>
+                <p class="hero-text">Найдите идеальный подарок для ваших близких</p>
+                <a href="gifts.html" class="btn btn-primary">Смотреть подарки</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">           
+            <h2 class="section-title">О нашем магазине</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Мы создаем рождественское настроение с 2010 года. Наша миссия — помочь вам найти идеальный подарок для ваших близких.</p>
+                    <div class="features">
+                        <div class="feature">
+                            <i class="fas fa-gift"></i>
+                            <h3>1000+ подарков</h3>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shipping-fast"></i>
+                            <h3>Бесплатная доставка</h3>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-star"></i>
+                            <h3>Гарантия качества</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="./assets/images/Santa.svg" alt="Санта">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Gifts -->
+    <section class="popular-gifts" id="gifts">
+        <div class="container">
+            <h2 class="section-title">Популярные подарки</h2>
+            <div class="gifts-grid">
+                <!-- Gift 1 -->
+                <div class="gift-card">
+                    <div class="gift-image">
+                        <img src="./assets/images/gift1.jpg" alt="Рождественский набор">
+                    </div>
+                    <div class="gift-info">
+                        <h3>Рождественский набор</h3>
+                        <p class="price">92.99 byn</p>
+                        <button class="btn btn-small">В корзину</button>
+                    </div>
+                </div>
+                
+                <!-- Gift 2 -->
+                <div class="gift-card">
+                    <div class="gift-image">
+                        <img src="./assets/images/gift2.jpg" alt="Ёлочные игрушки">
+                    </div>
+                    <div class="gift-info">
+                        <h3>Ёлочные игрушки</h3>
+                        <p class="price">66.99 byn</p>
+                        <button class="btn btn-small">В корзину</button>
+                    </div>
+                </div>
+                
+                <!-- Gift 3 -->
+                <div class="gift-card">
+                    <div class="gift-image">
+                        <img src="./assets/images/gift3.jpg" alt="Рождественский плед">
+                    </div>
+                    <div class="gift-info">
+                        <h3>Тёплый плед</h3>
+                        <p class="price">122.99 byn</p>
+                        <button class="btn btn-small">В корзину</button>
+                    </div>
+                </div>
+                
+                <!-- Gift 4 -->
+                <div class="gift-card">
+                    <div class="gift-image">
+                        <img src="./assets/images/gift4.jpg" alt="Ароматические свечи">
+                    </div>
+                    <div class="gift-info">
+                        <h3>Ароматические свечи</h3>
+                        <p class="price">48.99 byn</p>
+                        <button class="btn btn-small">В корзину</button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="gifts.html" class="btn btn-secondary">Все подарки</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Получите скидку 15%</h2>
+                <p>Подпишитесь на рассылку и получите скидку на первый заказ</p>
+                <form class="subscribe-form">
+                    <input type="email" placeholder="Ваш email" required>
+                    <button type="submit" class="btn btn-primary">Подписаться</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Рождественский Магазин</h3>
+                    <p>Создаем праздничное настроение с 2010 года</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Контакты</h3>
+                    <p><i class="fas fa-phone"></i> +375 (99) 123-45-67</p>
+                    <p><i class="fas fa-envelope"></i> info@christmas-shop.by</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Соцсети</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                    </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Рождественский Магазин</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>
+
