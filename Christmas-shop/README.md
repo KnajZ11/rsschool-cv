@@ -1,1 +1,1 @@
-https://raw.githack.com/KnajZ11/rsschool-cv/christmas-shop-part2/Christmas-shop/index-cs.html 
+ https://knajz11.github.io/rsschool-cv/Christmas-shop/index-cs.html
