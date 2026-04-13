@@ -1,2 +1,1 @@
- https://KnajZ11.github.io/repo-name/
- https://KnajZ11.github.io/repo-name/gifts.html
+ https://knajz11.github.io/rsschool-cv/Christmas-shop/index-cs.html
