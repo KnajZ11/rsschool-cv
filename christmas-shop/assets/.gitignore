@@ -1,0 +1,35 @@
+# Файлы операционной системы
+.DS_Store
+Thumbs.db
+
+# Файлы редактора
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Временные файлы
+*.tmp
+*.temp
+
+# Логи
+*.log
+npm-debug.log*
+
+# Зависимости
+node_modules/
+
+# Сборки
+dist/
+build/
+
+# Конфиденциальные данные
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Файлы для разработки (если будут)
+package-lock.json
+yarn.lock
