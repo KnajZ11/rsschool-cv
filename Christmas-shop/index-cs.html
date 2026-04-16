@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" dir="ltr">
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -16,6 +16,7 @@
     <!-- CSS файлы -->
     <link rel="stylesheet" href="./styles/main.css">
     <link rel="stylesheet" href="./styles/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Шрифты -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,6 +25,9 @@
     
     <!-- Font Awesome для иконок -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Канонический URL  для SEO -->
+    <link rel="canonical" href="https://ваш-сайт.ru/index-cs.html">
 </head>
 
 <body>
@@ -33,7 +37,7 @@
         <div class="container">
             <div class="header-content">
                 <a href="index-cs.html" class="logo" aria-label="Рождественский магазин - главная страница">
-                    <img src="./assets/images/Logo.svg" alt="Рождественский Магазин" width="180" height="40">
+                    <img src="./assets/images/Logo.svg" alt="Рождественский Магазин" width="180" height="40" loading="lazy">
                 </a>
                 
                 <!-- Мобильное меню -->
@@ -42,14 +46,14 @@
                 </button>
                 
                 <nav class="nav" aria-label="Основная навигация">
-                    <a href="index-cs.html" class="nav-link active">Главная</a>
+                    <a href="#" class="nav-link active">Главная</a>
                     <a href="#about" class="nav-link">О нас</a>
                     <a href="gifts.html" class="nav-link">Подарки</a>
                     <a href="#contact" class="nav-link">Контакты</a>
                 </nav>
                 
                 <div class="header-actions">
-                    <button class="icon-btn cart-btn" aria-label="Корзина покупок">
+                    <button class="icon-btn cart-btn" aria-label="Корзина покупок" aria-expanded="false">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-count" aria-live="polite">0</span>
                     </button>
@@ -59,7 +63,7 @@
     </header>
 
       <!-- Hero Section for Gifts Page -->
-    <section class="hero gifts-hero" aria-labelledby="gifts-hero-title">
+    <section class="hero gifts-hero" aria-labelledby="gifts-hero-title" role="banner" tabindex="0">
         <div class="container">
             <div class="gifts-hero-content">
                 <h1 class="gifts-hero-title" id="gifts-hero-title">Наши Подарки</h1>
@@ -231,7 +235,62 @@
             <p>Таймер обновляется в реальном времени</p>
         </div>
     </div>
-</section>
+    </section>
+     
+       <!-- Слайдер -->
+    <section class="slider-section">
+        <div class="container">
+            <h2 class="section-title">Популярные товары</h2>
+            <div class="slider-container">
+                <div class="slider">
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1513297887119-d46091b24bfa?w=1200" alt="Рождественские украшения">
+                        <div class="slide-content">
+                            <h3>Эксклюзивные украшения</h3>
+                            <p>Стеклянные шары ручной работы с уникальной росписью</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=1200" alt="Рождественские свитера">
+                        <div class="slide-content">
+                            <h3>Уютные свитера</h3>
+                            <p>Теплые вязаные свитера с традиционными узорами</p>
+                        </div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1200" alt="Рождественский декор">
+                        <div class="slide-content">
+                            <h3>Праздничный декор</h3>
+                            <p>Создайте атмосферу праздника в своем доме</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn prev-btn">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="slider-btn next-btn">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <div class="slider-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Случайные подарки -->
+    <section class="random-gifts">
+        <div class="container">
+            <h2 class="section-title">Случайные подарки</h2>
+            <p style="text-align: center; color: rgba(255,255,255,0.8); margin-bottom: 30px;">
+                Каждый раз новая подборка интересных товаров
+            </p>
+            <div class="random-gifts-grid">
+                <!-- Случайные подарки загружаются через JavaScript -->
+            </div>
+            <button class="btn refresh-btn">
+                <i class="fas fa-sync-alt"></i> Обновить подборку
+            </button>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer class="footer" id="contact">
@@ -242,25 +301,52 @@
                     <p>Создаем праздничное настроение с 2010 года</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Контакты</h3>
-                    <p><i class="fas fa-phone"></i> +375 (99) 123-45-67</p>
-                    <p><i class="fas fa-envelope"></i> info@christmas-shop.by</p>
+                    <h3 class="footer-title">Контакты</h3>
+                    <ul class="footer-contacts">
+                        <li><i class="fas fa-map-marker-alt"></i> Гомель, ул. Праздничная, 25</li>
+                        <li><i class="fas fa-phone"></i> +375 (99) 123-45-67</li>
+                        <li><i class="fas fa-envelope"></i> info@christmas-shop.ru</li>
+                        <li><i class="fas fa-clock"></i> Пн-Вс: 10:00 - 22:00</li>
+                    </ul>
                 </div>
+
                 <div class="footer-section">
+                    <h3 class="footer-title">Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Доставка и оплата</a></li>
+                        <li><a href="#">Возврат и обмен</a></li>
+                        <li><a href="#">Частые вопросы</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                    </ul>
+                </div>
+
+               <div class="footer-section">
                     <h3>Соцсети</h3>
                     <div class="social-links">
-                        <a href="#"><i class="fab fa-vk"></i></a>
-                        <a href="#"><i class="fab fa-telegram"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
+                           <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
                     </div>
-                    </div>
+                </div>
             </div>
             <div class="footer-bottom">
                 <p>© 2026 Рождественский Магазин</p>
-            </div>
-        </div>
+                <a href="https://rs.school/js/" target="_blank" rel="noopener noreferrer" class="rsschool-link">
+                  <img src="https://githubusercontent.com" alt="RS School Logo" width="100">
+                </a>
+             </div>
     </footer>
-    
-    <script src="script.js" defer></script>
+
+     <!-- Кнопка "Наверх" -->
+    <button id="backToTop" class="back-to-top-btn">
+      <i class="fas fa-chevron-up"></i>
+    </button>
+   
+    <!-- Подключаем скрипты -->
+    <script src="./data/slider.js"></script>
+    <script src="./data/modal.js"></script>
+    <script src="./script.js"></script>
  </body>
 </html>

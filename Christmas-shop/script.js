@@ -1,3 +1,15 @@
+// ==================== ГЛАВНЫЕ ПЕРЕМЕННЫЕ ====================
+let allGifts = []; // Здесь будут храниться все подарки
+let cart = JSON.parse(localStorage.getItem('cart')) || []; // Корзина из localStorage
+
+// =====  ИНИЦИАЛИЗАЦИЯ =====
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCart();
+    initializeWishlist();
+    initializeFilters();
+    initializeMobileMenu();
+});
+
 // ===== 1. ДОБАВЛЕНИЕ В КОРЗИНУ =====
 document.addEventListener('click', function(e) {
     // Обработка кнопок "В корзину"
@@ -332,4 +344,167 @@ window.addEventListener('resize', function() {
             }
         }
     }, 250);
+});
+
+// ===== 9.КНОПКА "НАВЕРХ" =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Создаем кнопку, если ее нет
+    if (!document.querySelector('.back-to-top-btn')) {
+        const backToTopBtn = document.createElement('button');
+        backToTopBtn.className = 'back-to-top-btn';
+        backToTopBtn.id = 'backToTop';
+        backToTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        backToTopBtn.setAttribute('aria-label', 'Наверх');
+        document.body.appendChild(backToTopBtn);
+    }
+    
+    const backToTopBtn = document.querySelector('.back-to-top-btn');
+    
+    if (!backToTopBtn) return;
+    
+    // Показываем/скрываем кнопку при прокрутке
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+    
+    // Плавная прокрутка наверх
+    backToTopBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Инициализация при загрузке
+    if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('show');
+    }
+});
+
+
+// ==================== 10. ОБНОВЛЕНИЕ СЛУЧАЙНЫХ ПОДАРКОВ ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const giftsGrid = document.querySelector('.random-gifts-grid');
+    const refreshBtn = document.querySelector('.refresh-btn');
+    
+    if (!giftsGrid) return;  
+    
+    // Массив подарков (Цены обновлены на BYN)
+    const gifts = [
+        {
+            id: 1, 
+            name: "Умная кофемашина", 
+            desc: "Автоматическая с Wi-Fi", 
+            price: "455 бел. руб.", 
+            image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop"
+        },
+        {
+            id: 2, 
+            name: "Беспроводные наушники", 
+            desc: "С шумаподовлением", 
+            price: "295 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop"
+        },
+        {
+            id: 3, 
+            name: "Электронная книга", 
+            desc: "С подсветкой", 
+            price: "350 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop"
+        },
+        {
+            id: 4, 
+            name: "Умные часы", 
+            desc: "Со встроенным фитнес-трекером", 
+            price: "540 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop"
+        },
+        {
+            id: 5, 
+            name: "Партативная калонка", 
+            desc: "Водонепроницаемая", 
+            price: "210 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&h=300&fit=crop"
+        },
+        {
+            id: 6, 
+            name: "Игровая консоль", 
+            desc: "Портативная", 
+            price: "770 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400&h=300&fit=crop"
+        },
+        {
+            id: 7, 
+            name: "Электросамакат", 
+            desc: "Складной", 
+            price: "875 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1579444741963-5ae2c9e79d8e?w=400&h=300&fit=crop"
+        },
+        {
+            id: 8, 
+            name: "Робат-пылесос", 
+            desc: "С навигацией", 
+            price: "645 бел. руб.",         
+            image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop"
+        }
+    ];
+    
+    function getRandomGifts(count = 4) {
+        return [...gifts].sort(() => Math.random() - 0.5).slice(0, count);
+    }
+    
+    function displayGifts(giftsArray) {
+        giftsGrid.innerHTML = giftsArray.map(gift => `
+            <div class="gift-card">
+                <div class="gift-image">
+                    <img src="${gift.image}" alt="${gift.name}" loading="lazy">
+                </div>
+                <div class="gift-content">
+                    <h3>${gift.name}</h3>
+                    <p>${gift.desc}</p>
+                    <div class="gift-price">
+                        <span class="price">${gift.price}</span>
+                        <button class="btn add-to-cart" data-id="${gift.id}">
+                           <i class="fas fa-cart-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const giftId = this.getAttribute('data-id');
+                addToCart(giftId);
+            });
+        });
+    }
+    
+    function addToCart(giftId) {
+        const gift = gifts.find(g => g.id == giftId);
+        if (!gift) return;
+        
+        // ИСПРАВЛЕНО: добавлены кавычки в селектор атрибута
+        const btn = document.querySelector(`.add-to-cart[data-id='${giftId}']`);
+        if (btn) {
+            btn.innerHTML = '<i class="fas fa-check"></i>';
+            btn.style.backgroundColor = '#4CAF50';
+        }
+        console.log(`Дададзена ў кошык: ${gift.name}`);
+    }
+
+    // Инициализация при загрузке
+    displayGifts(getRandomGifts());
+
+    // Обработчик кнопки обновления (если она есть на странице)
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            displayGifts(getRandomGifts());
+        });
+    }
 });
