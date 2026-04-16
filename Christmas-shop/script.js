@@ -392,72 +392,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const giftsGrid = document.querySelector('.random-gifts-grid');
     const refreshBtn = document.querySelector('.refresh-btn');
     
+    // Переменная для хранения данных, загруженных из JSON
+    let giftsData = [];
+
     if (!giftsGrid) return;  
-    
-    // Массив подарков (Цены обновлены на BYN)
-    const gifts = [
-        {
-            id: 1, 
-            name: "Умная кофемашина", 
-            desc: "Автоматическая с Wi-Fi", 
-            price: "455 бел. руб.", 
-            image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=300&fit=crop"
-        },
-        {
-            id: 2, 
-            name: "Беспроводные наушники", 
-            desc: "С шумаподовлением", 
-            price: "295 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop"
-        },
-        {
-            id: 3, 
-            name: "Электронная книга", 
-            desc: "С подсветкой", 
-            price: "350 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&h=300&fit=crop"
-        },
-        {
-            id: 4, 
-            name: "Умные часы", 
-            desc: "Со встроенным фитнес-трекером", 
-            price: "540 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop"
-        },
-        {
-            id: 5, 
-            name: "Партативная калонка", 
-            desc: "Водонепроницаемая", 
-            price: "210 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&h=300&fit=crop"
-        },
-        {
-            id: 6, 
-            name: "Игровая консоль", 
-            desc: "Портативная", 
-            price: "770 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400&h=300&fit=crop"
-        },
-        {
-            id: 7, 
-            name: "Электросамакат", 
-            desc: "Складной", 
-            price: "875 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1579444741963-5ae2c9e79d8e?w=400&h=300&fit=crop"
-        },
-        {
-            id: 8, 
-            name: "Робат-пылесос", 
-            desc: "С навигацией", 
-            price: "645 бел. руб.",         
-            image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop"
+
+    // --- Функция загрузки данных через fetch ---
+    async function loadGifts() {
+        try {
+            // Путь к моему JSON файлу
+            const response = await fetch('./data/gifts.json');
+            
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных с сервера');
+            }
+            
+            giftsData = await response.json();
+            
+            // После загрузки сразу отображаем 4 случайных подарка
+            displayGifts(getRandomGifts(4));
+            
+        } catch (error) {
+            console.error('Ошибка:', error);
+            giftsGrid.innerHTML = '<p style="color: white; text-align: center;">Не удалось загрузить подарки...</p>';
         }
-    ];
-    
-    function getRandomGifts(count = 4) {
-        return [...gifts].sort(() => Math.random() - 0.5).slice(0, count);
     }
     
+    // Получить случайные подарки из загруженного массива
+    function getRandomGifts(count = 4) {
+        if (giftsData.length === 0) return [];
+        return [...giftsData].sort(() => Math.random() - 0.5).slice(0, count);
+    }
+    
+    // Отрисовка карточек
     function displayGifts(giftsArray) {
         giftsGrid.innerHTML = giftsArray.map(gift => `
             <div class="gift-card">
@@ -477,6 +444,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `).join('');
         
+        // Вешаем события на кнопки после того, как они появились в DOM
+        attachCartEvents();
+    }
+    
+    function attachCartEvents() {
         document.querySelectorAll('.add-to-cart').forEach(btn => {
             btn.addEventListener('click', function() {
                 const giftId = this.getAttribute('data-id');
@@ -486,25 +458,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function addToCart(giftId) {
-        const gift = gifts.find(g => g.id == giftId);
+        const gift = giftsData.find(g => g.id == giftId);
         if (!gift) return;
         
-        // ИСПРАВЛЕНО: добавлены кавычки в селектор атрибута
+        // Cелектор с использованием шаблонных строк
         const btn = document.querySelector(`.add-to-cart[data-id='${giftId}']`);
         if (btn) {
             btn.innerHTML = '<i class="fas fa-check"></i>';
             btn.style.backgroundColor = '#4CAF50';
+            btn.style.pointerEvents = 'none'; // Чтобы нельзя было нажать дважды
         }
-        console.log(`Дададзена ў кошык: ${gift.name}`);
+        console.log(`Добавлено в корзину: ${gift.name}`);
     }
 
-    // Инициализация при загрузке
-    displayGifts(getRandomGifts());
-
-    // Обработчик кнопки обновления (если она есть на странице)
+    // Логика кнопки обновления
     if (refreshBtn) {
         refreshBtn.addEventListener('click', () => {
-            displayGifts(getRandomGifts());
+            // Вращаем иконку при нажатии (если есть i)
+            const icon = refreshBtn.querySelector('i');
+            if (icon) icon.style.transform = 'rotate(360deg)';
+            
+            displayGifts(getRandomGifts(4));          
+            
+            setTimeout(() => { if(icon) icon.style.transform = 'rotate(0deg)'; }, 500);
         });
     }
+
+    // СТАРТ: Загружаем данные
+    loadGifts();
 });
