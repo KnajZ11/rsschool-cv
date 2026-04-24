@@ -1,6 +1,6 @@
 // src/components/ProjectList.ts
 import { MonthlyData, Project } from '../types';
-import { getRevenue, getCost, deleteProject, getProjectRate } from '../services/dataService';
+import { getEmployeeRevenue, getEmployeeCost, deleteProject, getProjectRate } from '../services/dataService';
 import { ProjectForm } from './ProjectForm';
 
 export class ProjectList {
@@ -10,14 +10,13 @@ export class ProjectList {
   private sortState: { field: string; direction: 'asc' | 'desc' } = { field: 'projectName', direction: 'asc' };
 
   constructor(container: HTMLElement) {
-    // В index.html уже есть каркас таблицы, создаем только tbody один раз
     container.innerHTML = `
       <table class="project-list">
         <thead>
           <tr>
-            <th class="sortable" data-field="projectName">Название</th>
+            <th class="sortable" data-field="projectName">Проект</th>
             <th class="sortable" data-field="budget">Бюджет</th>
-            <th>Ставка</th>
+            <th>Загрузка (Real/Cap)</th>
             <th>Профит</th>
             <th>Действия</th>
           </tr>
@@ -52,17 +51,22 @@ export class ProjectList {
   private buildRow(project: Project): HTMLTableRowElement {
     const tr = document.createElement('tr');
     
-    // Считаем показатели проекта через общие сервисы
+    // Считаем показатели проекта
     const stats = this.calculateProjectStats(project.id);
     const profit = stats.revenue - stats.cost;
-    const rate = getProjectRate(project);
-
     tr.innerHTML = `
-      <td><strong>${project.projectName}</strong><br><small>${project.companyName}</small></td>
+      <td>
+        <strong>${project.projectName}</strong><br>
+        <small>${project.companyName}</small>
+      </td>
       <td>$${project.budget.toLocaleString()}</td>
-      <td>$${rate.toFixed(0)}</td>
+      <td>
+        <span title="Реальная загрузка / Требуемая емкость">
+          ${stats.totalRealCapacity.toFixed(1)} / ${project.capacity || 1.0}
+        </span>
+      </td>
       <td class="${profit >= 0 ? 'positive' : 'negative'}">
-        $${profit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+        <strong>$${Math.round(profit).toLocaleString()}</strong>
       </td>
       <td>
         <button class="btn-edit" title="Редактировать">✎</button>
@@ -70,57 +74,67 @@ export class ProjectList {
       </td>
     `;
 
-   (tr.querySelector('.btn-edit') as HTMLButtonElement).onclick = () => {
-  new ProjectForm(this.monthKey, () => (window as any).app.update(), project).show();
-};
+    (tr.querySelector('.btn-edit') as HTMLButtonElement).onclick = () => {
+      new ProjectForm(this.monthKey, () => (window as any).app.update(), project).show();
+    };
 
-(tr.querySelector('.btn-delete') as HTMLButtonElement).onclick = () => {
-  if (confirm(`Удалить проект "${project.projectName}"?`)) {
-    deleteProject(this.monthKey, project.id);
-    (window as any).app.update();
-  }
-};
+    (tr.querySelector('.btn-delete') as HTMLButtonElement).onclick = () => {
+      if (confirm(`Удалить проект "${project.projectName}"?`)) {
+        deleteProject(this.monthKey, project.id);
+        (window as any).app.update();
+      }
+    };
 
     return tr;
   }
 
   private calculateProjectStats(projectId: string) {
-    let revenue = 0;
-    let cost = 0;
+  let revenue = 0;
+  let cost = 0;
+  let totalRealCapacity = 0;
 
-    this.currentData?.employees.forEach(emp => {
-      const assignment = emp.assignments.find(a => a.projectId === projectId);
-      if (assignment) {
-        const project = this.currentData?.projects.find(p => p.id === projectId);
-        if (project) {
-          revenue += getRevenue(emp, project);
-          cost += getCost(emp, project);
-        }
-      }
-    });
+  if (!this.currentData) return { revenue, cost, totalRealCapacity };
 
-    return { revenue, cost };
-  }
+  // 1. Сначала находим сам проект по его ID
+  const project = this.currentData.projects.find(p => p.id === projectId);
+  if (!project) return { revenue, cost, totalRealCapacity };
+
+  // 2. Проходим по сотрудникам и считаем их вклад именно в ЭТОТ проект
+  this.currentData.employees.forEach(emp => {
+    const assignment = emp.assignments.find(a => a.projectId === projectId);
+    if (assignment) {
+      // ПЕРЕДАЕМ ВЕСЬ ОБЪЕКТ project, а не просто ID
+      revenue += getEmployeeRevenue(emp, project, this.currentData!);
+      cost += getEmployeeCost(emp, project.id);
+      totalRealCapacity += assignment.capacity;
+    }
+  });
+
+  return { revenue, cost, totalRealCapacity };
+}
 
   private initSort(): void {
-    this.tbody.parentElement?.querySelector('thead')?.addEventListener('click', (e) => {
-      const th = (e.target as HTMLElement).closest('th');
-      if (th && th.classList.contains('sortable')) {
-        const field = th.dataset.field!;
-        this.sortState.direction = (this.sortState.field === field && this.sortState.direction === 'asc') ? 'desc' : 'asc';
-        this.sortState.field = field;
-        this.refresh();
-      }
-    });
+    const thead = this.tbody.parentElement?.querySelector('thead');
+    if (thead) {
+      thead.addEventListener('click', (e) => {
+        const th = (e.target as HTMLElement).closest('th');
+        if (th && th.classList.contains('sortable')) {
+          const field = th.dataset.field!;
+          this.sortState.direction = (this.sortState.field === field && this.sortState.direction === 'asc') ? 'desc' : 'asc';
+          this.sortState.field = field;
+          this.refresh();
+        }
+      });
+    }
   }
 
   private applySort(projects: Project[]): void {
     const { field, direction } = this.sortState;
+    const mod = direction === 'asc' ? 1 : -1;
     projects.sort((a, b) => {
       const v1 = (a as any)[field];
       const v2 = (b as any)[field];
-      const modifier = direction === 'asc' ? 1 : -1;
-      return v1 < v2 ? -1 * modifier : v1 > v2 ? 1 * modifier : 0;
+      return v1 < v2 ? -1 * mod : v1 > v2 ? 1 * mod : 0;
     });
   }
 

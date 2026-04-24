@@ -15,6 +15,12 @@ export class EmployeeForm {
     const isEdit = !!this.employee;
     const positions: Position[] = ['junior', 'middle', 'senior', 'lead', 'architect', 'BO'];
 
+    // Вычисляем максимально допустимую дату рождения (сегодня минус 18 лет)
+    const today = new Date();
+    const maxBirthDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
+      .toISOString()
+      .split('T')[0];
+
     content.innerHTML = `
       <h3>${isEdit ? 'Редактировать' : 'Добавить'} сотрудника</h3>
       <form id="emp-form">
@@ -24,8 +30,11 @@ export class EmployeeForm {
         <label>Фамилия: 
           <input name="lastName" value="${this.employee?.lastName || ''}" required>
         </label>
-        <label>Дата рождения: 
-          <input type="date" name="birthDate" value="${this.employee?.birthDate || ''}" required>
+        <label>Дата рождения (18+): 
+          <input type="date" name="birthDate" 
+            value="${this.employee?.birthDate || ''}" 
+            max="${maxBirthDate}" 
+            required>
         </label>
         <label>Позиция: 
           <select name="position" required>
@@ -40,6 +49,8 @@ export class EmployeeForm {
           <input type="number" name="salary" value="${this.employee?.salary || ''}" required min="1">
         </label>
         
+        <div id="form-error" style="color: var(--danger-color); font-size: 0.85rem; margin-bottom: 10px;"></div>
+
         <div class="modal-actions-inline" style="margin-top: 20px">
           <button type="submit" class="btn-primary">${isEdit ? 'Сохранить' : 'Создать'}</button>
         </div>
@@ -49,14 +60,22 @@ export class EmployeeForm {
     overlay.style.display = 'flex';
 
     const form = content.querySelector('#emp-form') as HTMLFormElement;
+    const errorDiv = content.querySelector('#form-error') as HTMLDivElement;
+
     form.onsubmit = (e) => {
       e.preventDefault();
       const formData = new FormData(form);
+      const birthDateValue = formData.get('birthDate') as string;
+      
+      if (birthDateValue > maxBirthDate) {
+        errorDiv.textContent = 'Сотрудник должен быть старше 18 лет.';
+        return;
+      }
 
       const data = {
         firstName: formData.get('firstName') as string,
         lastName: formData.get('lastName') as string,
-        birthDate: formData.get('birthDate') as string,
+        birthDate: birthDateValue,
         position: formData.get('position') as Position,
         salary: Number(formData.get('salary')),
       };
