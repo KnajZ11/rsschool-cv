@@ -26,8 +26,8 @@
 ### Локально
 
 1. Склонируйте репозиторий:
-git clone <https://github.com>
-cd rsschool-cv
+git clone <[https://github.com](https://github.com/KnajZ11/rsschool-cv/tree/main/my%20project)>
+cd my project
 
 2. Установите зависимости:
 Убедитесь, что у вас установлен Node.js. Выполните команду в терминале:
