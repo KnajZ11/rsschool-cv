@@ -1,8 +1,9 @@
 // src/types/index.ts
+
 export type Position = 'junior' | 'middle' | 'senior' | 'lead' | 'architect' | 'BO';
 
 export interface Assignment {
-  employeeId: string;
+  // Поле employeeId удалено: оно избыточно и вызывает ошибки при генерации новых ID
   projectId: string;
   capacity: number; // от 0.0 до 1.5 (шаг 0.1)
   fitness: number;  // от 0.0 до 1.0 (шаг 0.01)

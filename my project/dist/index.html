@@ -3,54 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HR Planning Tool</title>
-  <script type="module" crossorigin src="/rsschool-cv/assets/index-CLIehzu9.js"></script>
-  <link rel="stylesheet" crossorigin href="/rsschool-cv/assets/index-Bs_UcMXY.css">
+  <title>Outsource Dashboard - RSSchool</title>
+  <script type="module" crossorigin src="/rsschool-cv/assets/index-B3jADUXu.js"></script>
+  <link rel="stylesheet" crossorigin href="/rsschool-cv/assets/index-CL8nEPyh.css">
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>HR Planning Tool</h1>
-      <div id="month-selector-container">
-        <!-- Сюда вставится селект из MonthSelector.ts -->
+    <header class="app-header">
+      <div class="header-main">
+        <h1>Outsource Dashboard</h1>
+        <!-- Контейнер для MonthSelector.ts (там должен быть селект и кнопка Copy) -->
+        <div id="month-selector-container"></div>
+      </div>
+      
+      <!-- Финансовый баннер вынесен в header для лучшей видимости по ТЗ -->
+      <div class="profit-banner">
+        Итоговая прибыль: <span id="total-profit">0 $</span>
       </div>
     </header>
 
-    <!-- Финансовый баннер -->
-    <div class="profit-banner">
-      Прибыль месяца: <span id="total-profit" class="positive">0 $</span>
-    </div>
+    <nav class="actions-bar">
+      <button id="add-employee-btn" class="btn-primary">➕ Добавить сотрудника</button>
+      <button id="add-project-btn" class="btn-primary">💼 Добавить проект</button>
+    </nav>
 
-    <!-- Кнопки действий -->
-    <div class="actions">
-      <button id="add-employee-btn">➕ Добавить сотрудника</button>
-      <button id="add-project-btn">💼 Добавить проект</button>
-    </div>
-
-    <!-- Основной контент: две колонки -->
-    <main class="lists-wrapper">
-      <section>
-        <h3>Команда</h3>
-        <div id="employee-list">
-          <!-- Сюда рендерятся сотрудники -->
+    <main class="dashboard-grid">
+      <!-- Секция сотрудников -->
+      <section class="list-section">
+        <div class="section-header">
+          <h3>Команда</h3>
+        </div>
+        <div id="employee-list" class="table-container">
+          <!-- Сюда EmployeeList.ts вставит таблицу -->
         </div>
       </section>
 
-      <section>
-        <h3>Проекты</h3>
-        <div id="project-list">
-          <!-- Сюда рендерятся проекты -->
+      <!-- Секция проектов -->
+      <section class="list-section">
+        <div class="section-header">
+          <h3>Проекты</h3>
+        </div>
+        <div id="project-list" class="table-container">
+          <!-- Сюда ProjectList.ts вставит таблицу -->
         </div>
       </section>
     </main>
   </div>
 
-  <!-- Модальное окно (одно общее для всех форм) -->
+  <!-- Модальное окно -->
   <div id="modal-overlay" class="modal-overlay" style="display: none;">
-    <div class="modal">
+    <div class="modal-window">
+      <!-- Контент формы (EmployeeForm, CapacityEditor и т.д.) -->
       <div id="modal-content"></div>
-      <div class="modal-actions">
-        <button id="modal-close" class="btn-delete">Закрыть</button>
+      
+      <div class="modal-footer">
+        <button id="modal-close" class="btn-secondary">Закрыть</button>
       </div>
     </div>
   </div>

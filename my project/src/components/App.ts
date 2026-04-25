@@ -32,10 +32,9 @@ export class App {
     const overlay = document.getElementById('modal-overlay')!;
 
     // 1. Добавление сотрудника
-    document.getElementById('add-employee-btn')!.onclick = () => {
-      // Передаем колбэк this.update, чтобы после сохранения App перерисовал всё
-      new EmployeeForm(this.monthKey, () => this.update()).show();
-    };
+    document.getElementById('add-employee-btn')!.addEventListener('click', () => {
+  new EmployeeForm(this.monthKey, () => this.update()).show();
+    });
 
     // 2. Добавление проекта
     document.getElementById('add-project-btn')!.onclick = () => {

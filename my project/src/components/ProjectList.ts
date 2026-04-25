@@ -1,6 +1,7 @@
 // src/components/ProjectList.ts
 import { MonthlyData, Project } from '../types';
-import { getEmployeeRevenue, getEmployeeCost, deleteProject, getProjectRate } from '../services/dataService';
+// ИСПРАВЛЕНО: импортируем getEmployeeProjectCost вместо getEmployeeCost
+import { getEmployeeRevenue, getEmployeeProjectCost, deleteProject } from '../services/dataService';
 import { ProjectForm } from './ProjectForm';
 
 export class ProjectList {
@@ -51,9 +52,9 @@ export class ProjectList {
   private buildRow(project: Project): HTMLTableRowElement {
     const tr = document.createElement('tr');
     
-    // Считаем показатели проекта
     const stats = this.calculateProjectStats(project.id);
     const profit = stats.revenue - stats.cost;
+    
     tr.innerHTML = `
       <td>
         <strong>${project.projectName}</strong><br>
@@ -89,29 +90,28 @@ export class ProjectList {
   }
 
   private calculateProjectStats(projectId: string) {
-  let revenue = 0;
-  let cost = 0;
-  let totalRealCapacity = 0;
+    let revenue = 0;
+    let cost = 0;
+    let totalRealCapacity = 0;
 
-  if (!this.currentData) return { revenue, cost, totalRealCapacity };
+    if (!this.currentData) return { revenue, cost, totalRealCapacity };
 
-  // 1. Сначала находим сам проект по его ID
-  const project = this.currentData.projects.find(p => p.id === projectId);
-  if (!project) return { revenue, cost, totalRealCapacity };
+    const project = this.currentData.projects.find(p => p.id === projectId);
+    if (!project) return { revenue, cost, totalRealCapacity };
 
-  // 2. Проходим по сотрудникам и считаем их вклад именно в ЭТОТ проект
-  this.currentData.employees.forEach(emp => {
-    const assignment = emp.assignments.find(a => a.projectId === projectId);
-    if (assignment) {
-      // ПЕРЕДАЕМ ВЕСЬ ОБЪЕКТ project, а не просто ID
-      revenue += getEmployeeRevenue(emp, project, this.currentData!);
-      cost += getEmployeeCost(emp, project.id);
-      totalRealCapacity += assignment.capacity;
-    }
-  });
+    this.currentData.employees.forEach(emp => {
+      const assignment = emp.assignments.find(a => a.projectId === projectId);
+      if (assignment) {
+        // Доход по сотруднику на этом проекте
+        revenue += getEmployeeRevenue(emp, project, this.currentData!);
+        // ИСПРАВЛЕНО: стоимость именно проектной части сотрудника
+        cost += getEmployeeProjectCost(emp, project.id);
+        totalRealCapacity += assignment.capacity;
+      }
+    });
 
-  return { revenue, cost, totalRealCapacity };
-}
+    return { revenue, cost, totalRealCapacity };
+  }
 
   private initSort(): void {
     const thead = this.tbody.parentElement?.querySelector('thead');

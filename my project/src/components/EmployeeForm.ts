@@ -15,7 +15,6 @@ export class EmployeeForm {
     const isEdit = !!this.employee;
     const positions: Position[] = ['junior', 'middle', 'senior', 'lead', 'architect', 'BO'];
 
-    // Вычисляем максимально допустимую дату рождения (сегодня минус 18 лет)
     const today = new Date();
     const maxBirthDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
       .toISOString()
@@ -25,12 +24,12 @@ export class EmployeeForm {
       <h3>${isEdit ? 'Редактировать' : 'Добавить'} сотрудника</h3>
       <form id="emp-form">
         <label>Имя: 
-          <input name="firstName" value="${this.employee?.firstName || ''}" required>
+          <input name="firstName" value="${this.employee?.firstName || ''}" required placeholder="Имя">
         </label>
         <label>Фамилия: 
-          <input name="lastName" value="${this.employee?.lastName || ''}" required>
+          <input name="lastName" value="${this.employee?.lastName || ''}" required placeholder="Фамилия">
         </label>
-        <label>Дата рождения (18+): 
+        <label>Дата рождения: 
           <input type="date" name="birthDate" 
             value="${this.employee?.birthDate || ''}" 
             max="${maxBirthDate}" 
@@ -46,13 +45,13 @@ export class EmployeeForm {
           </select>
         </label>
         <label>Зарплата ($): 
-          <input type="number" name="salary" value="${this.employee?.salary || ''}" required min="1">
+          <input type="number" name="salary" value="${this.employee?.salary || ''}" required min="1" step="1">
         </label>
         
-        <div id="form-error" style="color: var(--danger-color); font-size: 0.85rem; margin-bottom: 10px;"></div>
+        <div id="form-error" style="color: var(--danger-color); font-size: 0.85rem; margin: 10px 0;"></div>
 
-        <div class="modal-actions-inline" style="margin-top: 20px">
-          <button type="submit" class="btn-primary">${isEdit ? 'Сохранить' : 'Создать'}</button>
+        <div class="modal-actions" style="margin-top: 20px">
+          <button type="submit" class="btn-primary" style="width: 100%">${isEdit ? 'Сохранить изменения' : 'Создать сотрудника'}</button>
         </div>
       </form>
     `;
@@ -66,28 +65,39 @@ export class EmployeeForm {
       e.preventDefault();
       const formData = new FormData(form);
       const birthDateValue = formData.get('birthDate') as string;
+      const salary = Number(formData.get('salary'));
       
+      // Дополнительная валидация (ТЗ RSSchool это любит)
       if (birthDateValue > maxBirthDate) {
-        errorDiv.textContent = 'Сотрудник должен быть старше 18 лет.';
+        errorDiv.textContent = 'Сотрудник должен быть совершеннолетним (18+).';
+        return;
+      }
+
+      if (salary <= 0) {
+        errorDiv.textContent = 'Зарплата должна быть положительным числом.';
         return;
       }
 
       const data = {
-        firstName: formData.get('firstName') as string,
-        lastName: formData.get('lastName') as string,
+        firstName: (formData.get('firstName') as string).trim(),
+        lastName: (formData.get('lastName') as string).trim(),
         birthDate: birthDateValue,
         position: formData.get('position') as Position,
-        salary: Number(formData.get('salary')),
+        salary: salary,
       };
 
-      if (isEdit && this.employee) {
-        updateEmployee(this.monthKey, this.employee.id, data);
-      } else {
-        addEmployee(this.monthKey, data);
+      try {
+        if (isEdit && this.employee) {
+          updateEmployee(this.monthKey, this.employee.id, data);
+        } else {
+          addEmployee(this.monthKey, data);
+        }
+        
+        overlay.style.display = 'none';
+        this.onSave();
+      } catch (err) {
+        errorDiv.textContent = 'Ошибка при сохранении данных.';
       }
-
-      overlay.style.display = 'none';
-      this.onSave();
     };
   }
 }

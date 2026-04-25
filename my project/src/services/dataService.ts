@@ -15,7 +15,7 @@ function getWorkingDaysCount(monthKey: string): number {
     const dayOfWeek = new Date(year, month - 1, d).getDay();
     if (dayOfWeek !== 0 && dayOfWeek !== 6) workingDays++;
   }
-  return workingDays || 22; // Защита: возвращаем 22, если что-то пошло не так
+  return workingDays || 22;
 }
 
 export function getVacationFactor(employee: Employee, monthKey: string): number {
@@ -28,11 +28,10 @@ export function getVacationFactor(employee: Employee, monthKey: string): number 
     return dayOfWeek !== 0 && dayOfWeek !== 6;
   }).length;
 
-  // Коэффициент не может быть меньше 0
   return Math.max(0, (workingDays - vacationWorkDays) / workingDays);
 }
 
-// --- 2. Основные финансовые формулы ---
+// --- 2. Основные финансовые формулы  ---
 
 export function getProjectRate(project: Project): number {
   return (project.capacity || 0) === 0 ? 0 : (project.budget || 0) / project.capacity;
@@ -48,29 +47,40 @@ export function getEffectiveCapacity(employee: Employee, projectId: string, mont
 
 export function getEmployeeRevenue(employee: Employee, project: Project, monthData: MonthlyData): number {
   const empEffective = getEffectiveCapacity(employee, project.id, monthData.monthKey);  
-  
-  // Сумма эффективных мощностей всех сотрудников на этом проекте
   const totalUsedEffective = monthData.employees.reduce((sum, emp) => 
     sum + getEffectiveCapacity(emp, project.id, monthData.monthKey), 0);
   
-  // Емкость для доходов = макс(проектCapacity, использованныйЭффективныйМощность)
   const revenueCapacity = Math.max(project.capacity || 0, totalUsedEffective);
-  
   if (revenueCapacity === 0) return 0;  
-  const revenuePerUnit = (project.budget || 0) / revenueCapacity;
   
+  const revenuePerUnit = (project.budget || 0) / revenueCapacity;
   return revenuePerUnit * empEffective;
 }
 
-export function getEmployeeCost(employee: Employee, projectId: string): number {
+/**
+  Стоимость сотрудника на конкретном проекте (используется в ProjectList) */
+export function getEmployeeProjectCost(employee: Employee, projectId: string): number {
   const assignment = employee.assignments?.find(a => a.projectId === projectId);
   if (!assignment) return 0;
-  // стоимость сотрудника = зарплата × макс(0,5, назначенная мощность)
-  return (employee.salary || 0) * Math.max(0.5, assignment.capacity || 0);
+  return (employee.salary || 0) * (assignment.capacity || 0);
 }
 
-export function getBenchCost(employee: Employee): number {
-  return (employee.salary || 0) * 0.5;
+/**
+  Полная стоимость сотрудника (Проекты + 50% Bench на остаток ставки) */
+export function getEmployeeTotalCost(employee: Employee): number {
+  const salary = employee.salary || 0;
+  const assignments = employee.assignments || [];
+  
+  const totalAssignmentCapacity = assignments.reduce((sum, a) => sum + (a.capacity || 0), 0);
+  
+  // 1. Прямая стоимость по проектам
+  const projectsCost = totalAssignmentCapacity * salary;
+  
+  // 2. Стоимость простоя (бенч) до полной ставки (1.0) с коэффициентом 0.5
+  const idleCapacity = Math.max(0, 1 - totalAssignmentCapacity);
+  const benchCost = idleCapacity * salary * 0.5;
+  
+  return projectsCost + benchCost;
 }
 
 // --- 3. Итоговые показатели ---
@@ -86,12 +96,7 @@ export function getTotalRevenue(monthData: MonthlyData): number {
 export function getTotalCost(monthData: MonthlyData): number {
   if (!monthData.employees) return 0;
   return monthData.employees.reduce((total, employee) => {
-    if ((employee.assignments || []).length > 0) {
-      // Итого стоимость назначений сотрудника
-      return total + employee.assignments.reduce((sum, a) => 
-        sum + getEmployeeCost(employee, a.projectId), 0);
-    }
-    return total + getBenchCost(employee);
+    return total + getEmployeeTotalCost(employee);
   }, 0);
 }
 
@@ -145,7 +150,7 @@ export function deleteProject(monthKey: string, id: string): void {
   const data = getMonthData(monthKey);
   if (!data) return;
   data.projects = data.projects.filter(p => p.id !== id);
-  // Каскадное удаление проекта из назначений сотрудников
+  // Каскадное удаление проекта из назначений всех сотрудников
   data.employees = data.employees.map(emp => ({
     ...emp,
     assignments: emp.assignments.filter(a => a.projectId !== id)
@@ -153,7 +158,16 @@ export function deleteProject(monthKey: string, id: string): void {
   setMonthData(monthKey, data);
 }
 
-export function assignEmployee(monthKey: string, employeeId: string, projectId: string, capacity: number, fitness: number): { success: boolean; error?: string } {
+/**
+ * ИСПРАВЛЕНО: Объект ассайнмента теперь соответствует типу Assignment (без employeeId)
+ */
+export function assignEmployee(
+  monthKey: string, 
+  employeeId: string, 
+  projectId: string, 
+  capacity: number, 
+  fitness: number
+): { success: boolean; error?: string } {
   const data = getMonthData(monthKey);
   if (!data) return { success: false, error: 'Месяц не инициализирован' };
   
@@ -164,7 +178,13 @@ export function assignEmployee(monthKey: string, employeeId: string, projectId: 
     return { success: false, error: 'Уже назначен на этот проект' };
   }
 
-  emp.assignments.push({ employeeId, projectId, capacity, fitness });
+  // Больше не передаем employeeId внутрь ассайнмента
+  emp.assignments.push({ 
+    projectId, 
+    capacity, 
+    fitness 
+  });
+
   setMonthData(monthKey, data);
   return { success: true };
 }
@@ -190,10 +210,14 @@ export function updateVacationDays(monthKey: string, employeeId: string, days: n
   setMonthData(monthKey, data);
 }
 
+/**
+ * ИСПРАВЛЕНО: При копировании месяца убрана привязка к старому employeeId внутри ассайнментов
+ */
 export function copyFromPreviousMonth(prevKey: string, newKey: string): boolean {
   const prevData = getMonthData(prevKey);
   if (!prevData) return false;
 
+  // Мапа для связи старых ID проектов с новыми
   const projectIdMap = new Map<string, string>();
   const newProjects = prevData.projects.map(p => {
     const newId = generateId();
@@ -206,12 +230,12 @@ export function copyFromPreviousMonth(prevKey: string, newKey: string): boolean 
     return { 
       ...e, 
       id: newEmpId, 
-      vacationDays: [], 
+      vacationDays: [], // Отпуска в новом месяце всегда пустые по ТЗ
       assignments: e.assignments.map(a => ({ 
-        ...a, 
-        employeeId: newEmpId,
-        // Если проект был скопирован - берем новый ID, иначе оставляем как есть
-        projectId: projectIdMap.get(a.projectId) || a.projectId 
+        projectId: projectIdMap.get(a.projectId) || a.projectId,
+        capacity: a.capacity,
+        fitness: a.fitness
+        // Поле employeeId удалено согласно новому интерфейсу
       })) 
     };
   });

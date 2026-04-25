@@ -1,6 +1,7 @@
 // src/components/EmployeeList.ts
 import { Employee, MonthlyData } from '../types';
-import { deleteEmployee, getEmployeeRevenue, getEmployeeCost, getBenchCost } from '../services/dataService';
+// ИСПРАВЛЕНО: импортируем getEmployeeTotalCost вместо старых функций
+import { deleteEmployee, getEmployeeRevenue, getEmployeeTotalCost } from '../services/dataService';
 import { EmployeeForm } from './EmployeeForm';
 import { CapacityEditor } from './CapacityEditor';
 import { VacationEditor } from './VacationEditor';
@@ -50,7 +51,6 @@ export class EmployeeList {
   private refresh(): void {
     if (!this.currentData) return;
 
-    // Обновляем визуальное состояние заголовков для сортировки
     this.container.querySelectorAll('th.sortable').forEach(th => {
       const field = (th as HTMLElement).dataset.field;
       th.classList.toggle('active', field === this.sortState.field);
@@ -76,22 +76,19 @@ export class EmployeeList {
     const totalCapacity = emp.assignments.reduce((sum, a) => sum + a.capacity, 0);
     const capacityStatus = totalCapacity > 1.2 ? 'overload' : totalCapacity < 0.5 ? 'warning' : 'normal';
 
-    // 2. Расчет финансов (согласно вашим формулам)
+    // 2. Расчет финансов (ИСПРАВЛЕНО СОГЛАСНО ТЗ)
     let totalRevenue = 0;
-    let totalCost = 0;
+    
+    // Считаем выручку по каждому проекту
+    emp.assignments.forEach(assign => {
+      const project = this.currentData?.projects.find(p => p.id === assign.projectId);
+      if (project && this.currentData) {
+        totalRevenue += getEmployeeRevenue(emp, project, this.currentData);
+      }
+    });
 
-    if (emp.assignments.length > 0) {
-      emp.assignments.forEach(assign => {
-        const project = this.currentData?.projects.find(p => p.id === assign.projectId);
-        if (project && this.currentData) {
-          totalRevenue += getEmployeeRevenue(emp, project, this.currentData);
-          totalCost += getEmployeeCost(emp, assign.projectId);
-        }
-      });
-    } else {
-      totalCost = getBenchCost(emp);
-    }
-
+    // ИСПРАВЛЕНО: Получаем итоговую стоимость (проекты + бенч) одной функцией
+    const totalCost = getEmployeeTotalCost(emp);
     const profit = totalRevenue - totalCost;
 
     tr.innerHTML = `
@@ -107,7 +104,7 @@ export class EmployeeList {
         <small>${totalCapacity.toFixed(1)} / 1.5</small>
       </td>
       <td>${Math.round(totalRevenue).toLocaleString()}</td>
-      <td title="${emp.assignments.length === 0 ? 'Скамейка (50%)' : 'Проектная стоимость'}">
+      <td title="Включает проектную ставку и частичный бенч (50%)">
         ${Math.round(totalCost).toLocaleString()}
       </td>
       <td class="${profit >= 0 ? 'positive' : 'negative'}">

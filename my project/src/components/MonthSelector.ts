@@ -1,11 +1,12 @@
 // src/components/MonthSelector.ts
 import { copyFromPreviousMonth } from '../services/dataService';
+import { getMonthData } from '../services/storageService';
 
 export class MonthSelector {
   private container: HTMLElement;
   private currentKey: string;
   private onChange: (newKey: string) => void;
-  private select!: HTMLSelectElement; // используем !, так как инициализируем в render
+  private select!: HTMLSelectElement;
 
   constructor(container: HTMLElement, initialKey: string, onChange: (key: string) => void) {
     this.container = container;
@@ -18,16 +19,17 @@ export class MonthSelector {
     this.container.innerHTML = '';
     
     const controlsWrapper = document.createElement('div');
-    controlsWrapper.className = 'month-selector-controls';
+    controlsWrapper.style.display = 'flex';
+    controlsWrapper.style.gap = '10px';
+    controlsWrapper.style.alignItems = 'center';
 
     this.select = document.createElement('select');
     
-    // Генерируем опции
+    // Генерируем опции на 2024-2026 годы
     const years = [2024, 2025, 2026];
-    const months = ['01','02','03','04','05','06','07','08','09','10','11','12'];
-    
     for (const year of years) {
-      for (const month of months) {
+      for (let m = 1; m <= 12; m++) {
+        const month = String(m).padStart(2, '0');
         const key = `${year}-${month}`;
         const option = document.createElement('option');
         option.value = key;
@@ -43,21 +45,26 @@ export class MonthSelector {
     });
 
     const copyBtn = document.createElement('button');
-    copyBtn.textContent = '📋 Copy from previous month';
-    copyBtn.className = 'btn-copy';
+    copyBtn.textContent = '📋 Copy prev month';
+    copyBtn.className = 'btn-copy'; // Стили в style.css
     
     copyBtn.addEventListener('click', () => {
+      // ПРОВЕРКА: Есть ли уже данные в текущем месяце?
+      const currentData = getMonthData(this.currentKey);
+      if (currentData && (currentData.employees.length > 0 || currentData.projects.length > 0)) {
+        if (!confirm('В текущем месяце уже есть данные. Копирование полностью удалит их и заменит данными из прошлого месяца. Продолжить?')) {
+          return;
+        }
+      }
+
       const [year, month] = this.currentKey.split('-').map(Number);
-      // month - 1 — это текущий месяц в формате Date (0-11)
-      // month - 2 — это предыдущий месяц
       const prevDate = new Date(year, month - 2); 
       const prevKey = `${prevDate.getFullYear()}-${String(prevDate.getMonth() + 1).padStart(2, '0')}`;
       
       if (copyFromPreviousMonth(prevKey, this.currentKey)) {
         this.onChange(this.currentKey);
-        alert(`Данные успешно скопированы из ${prevKey}`);
       } else {
-        alert(`Нет данных за предыдущий месяц (${prevKey})`);
+        alert(`Нет данных для копирования за предыдущий период (${prevKey})`);
       }
     });
 
