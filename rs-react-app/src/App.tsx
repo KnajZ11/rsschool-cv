@@ -7,8 +7,8 @@ import ErrorButton from './components/ErrorButton';
 import Card from './components/Card';
 import { type State } from './types';
 
-class App extends Component<{}, State> {
-  constructor(props: {}) {
+class App extends Component<Record<string, never>, State> {
+  constructor(props: Record<string, never>) {
     super(props);
     this.state = {
       results: [],

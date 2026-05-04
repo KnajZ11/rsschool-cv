@@ -5,8 +5,8 @@ interface ErrorButtonState {
   shouldCrash: boolean;
 }
 
-class ErrorButton extends Component<{}, ErrorButtonState> {
-  constructor(props: {}) {
+class ErrorButton extends Component<Record<string, never>, ErrorButtonState> {
+  constructor(props: Record<string, never>) {
     super(props);
     this.state = { shouldCrash: false };
   }
@@ -16,7 +16,6 @@ class ErrorButton extends Component<{}, ErrorButtonState> {
   };
 
   render() {
-    // Согласно ТЗ, ошибка должна возникнуть во время рендеринга
     if (this.state.shouldCrash) {
       throw new Error('Критическая ошибка приложения!');
     }
