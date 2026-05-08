@@ -3,7 +3,7 @@
 Проект выполнен в рамках курса RS School. Приложение позволяет искать персонажей Rick and Morty API, сохраняет состояние поиска и обрабатывает ошибки.
 
 ## 🚀 Ссылки
-- **App Link:** [https://knajz11.github.io/rsschool-cv/](https://github.io)
+- **App Link:** [https://knajz11.github.io/rsschool-cv/](https://knajz11.github.io/rsschool-cv/)
 - **Pull Request:** [View PR #13](https://github.com/KnajZ11/rsschool-cv/pull/13)
 
 ## 🛠 Технологии
