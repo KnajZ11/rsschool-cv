@@ -4,7 +4,7 @@
 
 ## 🚀 Ссылки
 - **App Link:** [https://knajz11.github.io/rsschool-cv/](https://github.io)
-- **Pull Request:** [View PR #12](https://github.com)
+- **Pull Request:** [View PR #13](https://github.com/KnajZ11/rsschool-cv/pull/13)
 
 ## 🛠 Технологии
 - **React 19** (Class Components)
