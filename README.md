@@ -1,25 +1,42 @@
-# Rick and Morty Search App (React Class Components)
+# Rick and Morty Search App (React + Vitest) 🚀
 
-Проект выполнен в рамках курса RS School. Приложение позволяет искать персонажей Rick and Morty API, сохраняет состояние поиска и обрабатывает ошибки.
+Приложение для поиска персонажей вселенной "Рик и Морти", созданное в рамках обучения в **RS School**. Проект демонстрирует работу с классовыми компонентами React, типизацию на TypeScript и глубокое юнит-тестирование.
 
-## 🚀 Ссылки
-- **App Link:** [https://knajz11.github.io/rsschool-cv/](https://knajz11.github.io/rsschool-cv/)
-- **Pull Request:** [View PR #13](https://github.com/KnajZ11/rsschool-cv/pull/13)
+## 🔗 Ссылки
+- **App Link (Deploy):** [https://github.io](https://knajz11.github.io/rsschool-cv/)
+- **Pull Request (Task 2):** [View PR #13](https://github.com/KnajZ11/rsschool-cv/pull/13)
 
 ## 🛠 Технологии
 - **React 19** (Class Components)
 - **TypeScript** (Strict mode)
-- **Vitest & RTL** (Coverage: 91.37%)
-- **Vite**
+- **Vite** (Build tool)
+- **Vitest & React Testing Library** (Testing)
+- **GitHub Pages** (Deployment)
 
-## 📋 Реализованные требования
-- [x] Классовые компоненты (App, SearchBar, Card и др.).
-- [x] ErrorBoundary для отлова ошибок при рендеринге.
-- [x] Сохранение поискового запроса в `localStorage`.
-- [x] Loader (индикатор загрузки).
-- [x] Покрытие тестами > 80% (Statements).
+## 📊 Тестирование и Покрытие
+В проекте реализовано 16 интеграционных и юнит-тестов, покрывающих основные сценарии работы приложения.
+- **Итоговое покрытие (Statements):** `91.37%`
+- **Компоненты:** `100%` покрытие всех файлов в директории `src/components`.
 
-## 💻 Команды
-- `npm run dev` — запуск проекта.
-- `npm run test:coverage` — отчет по тестам.
-- `npm run deploy` — деплой на GitHub Pages.
+## 📊 Отчет о покрытии (Coverage Report)
+
+Итоговое покрытие (Statements) составляет **91.37%**.
+
+| File | % Stmts | % Branch | % Funcs | % Lines |
+| :--- | :---: | :---: | :---: | :---: |
+| **All files** | **91.37** | **86.36** | **100** | **92.98** |
+| `src/App.tsx` | 88.88 | 100 | 100 | 88.88 |
+| `src/components/*` | 100 | 100 | 100 | 100 |
+
+## 📋 Реализованный функционал
+- **Class Components:** Использование исключительно классового подхода согласно ТЗ.
+- **LocalStorage:** Сохранение поискового запроса между сессиями.
+- **ErrorBoundary:** Перехват и обработка ошибок рендеринга с Fallback UI.
+- **API Mocking:** Тестирование асинхронных запросов без реальных обращений к серверу.
+- **Loading State:** Отображение индикатора загрузки во время запросов.
+
+## 💻 Запуск проекта
+1. Установка зависимостей: `npm install`
+2. Запуск dev-сервера: `npm run dev`
+3. Запуск тестов: `npm run test`
+4. Отчет по покрытию: `npm run test:coverage`
