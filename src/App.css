@@ -1,0 +1,194 @@
+/*rs-react-app\src\App.css
+/* Базовые стили для центровки контента */
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  #center {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+/* Контейнер поиска */
+.search-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 10px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--social-bg);
+  color: var(--text-h);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+}
+
+/* Стили кнопок (базовый класс .counter) */
+.counter {
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: all 0.3s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.counter:hover {
+  border-color: var(--accent-border);
+  filter: brightness(1.1);
+}
+
+/* Кнопка вызова ошибки (специфичный стиль) */
+.error-button {
+  background-color: #eb4034 !important;
+  color: white !important;
+  margin-top: 10px;
+}
+
+.error-button:hover {
+  background-color: #c43127 !important;
+}
+
+/* Сетка результатов */
+.results-area {
+  width: 100%;
+  min-height: 300px;
+  margin-top: 20px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 20px 0;
+}
+
+/* Стили карточки персонажа */
+.card {
+  background: var(--social-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow);
+  border-color: var(--accent-border);
+}
+
+.card img {
+  border-radius: 8px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: var(--accent-bg);
+}
+
+.card p {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-h);
+  font-size: 1.1rem;
+}
+
+.card span {
+  font-size: 0.85rem;
+  color: var(--text-h);
+  opacity: 0.6;
+}
+
+/* Состояние загрузки и ошибок */
+.loader {
+  font-style: italic;
+  color: var(--accent);
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+}
+
+.error-fallback {
+  padding: 40px;
+  border: 2px dashed #eb4034;
+  border-radius: 12px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  text-align: center;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+}
+
+/* Декоративные элементы (тики и разделители) */
+.ticks {
+  position: relative;
+  width: 100%;
+  height: 1px;
+}
+
+.ticks::before,
+.ticks::after {
+  content: '';
+  position: absolute;
+  top: -4.5px;
+  border: 5px solid transparent;
+}
+
+.ticks::before {
+  left: 0;
+  border-left-color: var(--border);
+}
+
+.ticks::after {
+  right: 0;
+  border-right-color: var(--border);
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+}
