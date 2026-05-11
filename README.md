@@ -5,7 +5,7 @@
 ## 🔗 Ссылки
 
 - **App Link (Deploy):** [https://github.io](https://knajz11.github.io/rsschool-cv/)
-- **Pull Request (Task 2):** [View PR #14](https://github.com/KnajZ11/rsschool-cv/pull/14)
+- **Pull Request (Task 3):** [View PR #14](https://github.com/KnajZ11/rsschool-cv/pull/14)
 
 ## 🛠 Технологии
 
