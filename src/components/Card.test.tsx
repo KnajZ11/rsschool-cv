@@ -9,7 +9,10 @@ describe('Card Component', () => {
     id: 1,
     name: 'Rick Sanchez',
     image: 'https://rickandmortyapi.com/',
-    species: 'Human',   
+    species: 'Human',
+    status: 'Alive',
+    gender: 'Male',
+    location: { name: 'Earth', url: '' },   
   };
 
   it('должен успешно отрендерить имя персонажа', () => {

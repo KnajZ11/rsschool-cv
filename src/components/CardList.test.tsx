@@ -6,9 +6,25 @@ import { type Character } from '../types';
 
 describe('CardList Component', () => { 
   const mockCharacters: Character[] = [
-    { id: 1, name: 'Rick Sanchez', species: 'Human', image: 'rick.png' },
-    { id: 2, name: 'Morty Smith', species: 'Human', image: 'morty.png' },
-  ];
+  { 
+    id: 1, 
+    name: 'Rick Sanchez', 
+    species: 'Human', 
+    image: 'rick.png',
+    status: 'Alive',
+    gender: 'Male',
+    location: { name: 'Earth', url: '' }
+  },
+  { 
+    id: 2, 
+    name: 'Morty Smith', 
+    species: 'Human', 
+    image: 'morty.png',
+    status: 'Alive',
+    gender: 'Male',
+    location: { name: 'Earth', url: '' }
+  },
+ ];
 
   it('рендерит правильное количество карточек', () => {   
     render(<CardList characters={mockCharacters} />);

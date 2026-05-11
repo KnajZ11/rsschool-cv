@@ -4,6 +4,12 @@ export interface Character {
   name: string;
   image: string;
   species: string;
+    status: string;
+  gender: string;
+  location: {
+    name: string;
+    url: string;
+  };
 }
 
 export interface State {
