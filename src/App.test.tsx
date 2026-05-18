@@ -1,36 +1,54 @@
 // rs-react-app\src\App.test.tsx
 import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import App from './App';
+import { ThemeProvider } from './context/ThemeContext';
+import { useCharacterStore } from './store/useCharacterStore';
 
 describe('App Component', () => {
   beforeEach(() => {
     localStorage.clear();
-    vi.stubGlobal('fetch', vi.fn()); // Мокаем глобальный fetch
+    vi.stubGlobal('fetch', vi.fn());    
+    useCharacterStore.setState({ selectedCharacters: [] });
   });
 
-  it('должен загружать и отображать персонажей при старте', async () => {
-    // Имитируем успешный ответ от Rick and Morty API
+  const renderApp = () => {
+    return render(
+      <BrowserRouter>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </BrowserRouter>
+    );
+  };
+
+  it('должен загружать и отображать персонажей при старте', async () => {    
     const mockResponse = {
       ok: true,
       json: async () => ({
-        results: [{ id: 1, name: 'Rick Sanchez', species: 'Human', image: 'rick.png' }],
+        results: [{ 
+          id: 1, 
+          name: 'Rick Sanchez', 
+          species: 'Human', 
+          image: 'rick.png',
+          status: 'Alive',
+          gender: 'Male',
+          location: { name: 'Earth', url: '' }
+        }],
       }),
     };
     vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
 
-    render(<App />);
-
-    // Проверяем наличие заголовка
+    renderApp();
+    
     expect(screen.getByText(/Rick and Morty Search/i)).toBeInTheDocument();
-
-    // Проверяем появление персонажа (это покроет ветку успеха в fetchData)
+    
     const characterName = await screen.findByText(/Rick Sanchez/i);
     expect(characterName).toBeInTheDocument();
   });
 
-  it('должен отображать лоадер во время загрузки данных', async () => {
-    // Задерживаем ответ, чтобы лоадер успел "повиснуть" в DOM
+  it('должен отображать лоадер во время загрузки данных', async () => {    
     vi.mocked(fetch).mockImplementation(() => 
       new Promise((resolve) => 
         setTimeout(() => resolve({
@@ -40,23 +58,20 @@ describe('App Component', () => {
       )
     );
 
-    render(<App />);
-
-    // Проверяем лоадер по тексту из твоего App.tsx
-    expect(screen.getByText(/Ищем персонажей в мультивселенной/i)).toBeInTheDocument();
+    renderApp();    
+    
+    expect(screen.getByText(/Загрузка мультивселенной/i)).toBeInTheDocument();
   });
 
-  it('должен отображать сообщение, если результаты не найдены', async () => {
-    // Имитируем пустой ответ (например, 404 от API)
+  it('должен отображать сообщение, если результаты не найдены', async () => {    
     vi.mocked(fetch).mockResolvedValue({
       ok: false,
       json: async () => ({ results: [] }),
     } as Response);
 
-    render(<App />);
-
-    // Ждем сообщения об отсутствии результатов
-    const noResults = await screen.findByText(/По вашему запросу никого не нашли/i);
+    renderApp();    
+    
+    const noResults = await screen.findByText(/Никого не нашли. Попробуйте другой поиск/i);
     expect(noResults).toBeInTheDocument();
   });
 });

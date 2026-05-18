@@ -3,40 +3,35 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import SearchBar from './SearchBar';
 
+const LS_KEY = 'search_term';
+
 describe('SearchBar', () => {
   const mockOnSearch = vi.fn();
-  // Ключ как в компоненте!
-  const LS_KEY = 'search_term'; 
 
   beforeEach(() => {
     localStorage.clear();
-    vi.clearAllMocks();
+    mockOnSearch.mockClear();
   });
 
-  it('сохраняет значение в localStorage при нажатии на кнопку Search', () => {
-    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+  it('сохраняет значение в localStorage при нажатии на кнопку Поиск', () => {
     render(<SearchBar onSearch={mockOnSearch} />);
-    
+
     const input = screen.getByRole('textbox');
-    const button = screen.getByRole('button', { name: /search/i });
+    const button = screen.getByRole('button', { name: /поиск/i });
 
     fireEvent.change(input, { target: { value: 'Rick' } });
     fireEvent.click(button);
-
-    expect(setItemSpy).toHaveBeenCalledWith(LS_KEY, 'Rick');    
+   
+    const savedValue = localStorage.getItem(LS_KEY);
+    expect(savedValue).toBe(JSON.stringify('Rick'));
     expect(mockOnSearch).toHaveBeenCalledWith('Rick');
   });
 
-  it('восстанавливает значение из localStorage при инициализации', () => {
-    // 1. Сначала записываем данные в LS
-    localStorage.setItem(LS_KEY, 'Morty');
-    
-    // 2. Рендерим компонент (в конструкторе сработает getItem)
+  it('восстанавливает значение из localStorage при инициализации', () => {    
+    localStorage.setItem(LS_KEY, JSON.stringify('Morty'));
     render(<SearchBar onSearch={mockOnSearch} />);
-    
+
     const input = screen.getByRole('textbox') as HTMLInputElement;
-    
-    // 3. Теперь значение должно быть в инпуте
     expect(input.value).toBe('Morty');
   });
 });

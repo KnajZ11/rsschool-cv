@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/ErrorButton.tsx</title>
+    <title>Code coverage report for src/hooks/useLocalStorage.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/components</a> ErrorButton.tsx</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/hooks</a> useLocalStorage.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">73.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>11/15</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>10/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,81 +97,75 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//rs-react-app\src\components\ErrorButton.tsx
-import { Component } from 'react';
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// rsschool-cv\src\hooks\useLocalStorage.ts
+import { useState, useEffect } from 'react';
 &nbsp;
-interface ErrorButtonState {
-  shouldCrash: boolean;
-}
+/**
+ * Хук для синхронизации состояния с LocalStorage.
+ * @param key Ключ, по которому данные хранятся в браузере.
+ * @param initialValue Начальное значение, если в памяти ничего нет.
+ */
+export function useLocalStorage&lt;T&gt;(key: string, initialValue: T) {  
+ const [storedValue, setStoredValue] = useState&lt;T&gt;(() =&gt; {
+  try {
+    const item = window.localStorage.getItem(key);
+    if (!item) return initialValue;
 &nbsp;
-class ErrorButton extends Component&lt;Record&lt;string, never&gt;, ErrorButtonState&gt; {
-  constructor(props: Record&lt;string, never&gt;) {
-    super(props);
-    this.state = { shouldCrash: false };
-  }
-&nbsp;
-  handleCrash = () =&gt; {
-    this.setState({ shouldCrash: true });
-  };
-&nbsp;
-  render() {
-    if (this.state.shouldCrash) {
-      throw new Error('Критическая ошибка приложения!');
+    try {
+      return JSON.parse(item);
+    } catch {      
+<span class="cstat-no" title="statement not covered" >      return item as unknown as T;</span>
     }
-&nbsp;
-    return (
-      &lt;button 
-        type="button"
-        className="counter" 
-        onClick={this.handleCrash}        
-        style={{ marginTop: '10px', backgroundColor: '#ff4d4d', color: 'white' }}
-      &gt;
-        Вызвать ошибку
-      &lt;/button&gt;
-    );
+  } catch (error) {
+<span class="cstat-no" title="statement not covered" >    console.error(error);</span>
+<span class="cstat-no" title="statement not covered" >    return initialValue;</span>
   }
-}
-&nbsp;
-export default ErrorButton;
-&nbsp;</pre></td></tr></table></pre>
+});
+  
+  useEffect(() =&gt; {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(storedValue));
+    } catch (error) {
+<span class="cstat-no" title="statement not covered" >      console.error(`Ошибка записи в LocalStorage по ключу "${key}":`, error);</span>
+    }
+  }, [key, storedValue]);
+  
+  return [storedValue, setStoredValue] as const;
+}</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

@@ -7,7 +7,6 @@ interface SearchProps {
 }
 
 const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {  
- 
   const [searchTerm, setSearchTerm] = useLocalStorage('search_term', '');
   
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,12 +27,13 @@ const SearchBar: React.FC<SearchProps> = ({ onSearch }) => {
         value={searchTerm}
         onChange={handleInputChange}
       />
+      {/* ИСПРАВЛЕНО: Текст кнопки изменен на "Поиск" по требованиям ТЗ */}
       <button 
         type="button" 
         className="counter" 
         onClick={handleSearchClick}
       >
-        Search
+        Поиск
       </button>
     </div>
   );

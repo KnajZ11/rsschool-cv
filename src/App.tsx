@@ -9,29 +9,32 @@ import Card from './components/Card';
 import CharacterDetails from './components/CharacterDetails';
 import NotFound from './components/NotFound';
 import About from './components/About';
+import Flyout from './components/Flyout';
+import { useTheme } from './hooks/useTheme';
 import { type Character } from './types';
 
 const App = () => {
   const [results, setResults] = useState<Character[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  
+  const { theme, toggleTheme } = useTheme();
 
-  // Источник правды — URL
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const currentTerm = searchParams.get('name') || localStorage.getItem('search_term') || '';
 
-  // Автоматическая установка параметров в URL при первом входе
   useEffect(() => {
     if (!searchParams.get('page')) {
       setSearchParams({ name: currentTerm, page: '1' }, { replace: true });
     }
   }, [searchParams, setSearchParams, currentTerm]);
-
-   const fetchData = useCallback(async (term: string, page: number) => {
+  
+  const fetchData = useCallback(async (term: string, page: number, signal?: AbortSignal) => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${encodeURIComponent(term)}&page=${page}`
+        `https://rickandmortyapi.com/api/character/?name=${encodeURIComponent(term)}&page=${page}`,
+        { signal }
       );
       
       if (!response.ok) {
@@ -42,15 +45,27 @@ const App = () => {
       const data = await response.json();
       setResults(data.results || []);
     } catch (error) {
-      console.error("Ошибка загрузки:", error);
-      setResults([]);
+      if ((error as Error).name !== 'AbortError') {
+        console.error("Ошибка загрузки:", error);
+        setResults([]);
+      }
     } finally {
       setIsLoading(false);
     }
   }, []);
-
+  
   useEffect(() => {
-    fetchData(currentTerm, currentPage);
+    const controller = new AbortController();
+    
+    const loadData = async () => {
+      await fetchData(currentTerm, currentPage, controller.signal);
+    };
+    
+    loadData();
+    
+    return () => {
+      controller.abort();
+    };
   }, [currentPage, currentTerm, fetchData]);
 
   const handleSearch = (term: string) => {
@@ -66,8 +81,18 @@ const App = () => {
     <ErrorBoundary>
       <header className="main-header">
         <nav className="nav-container">
-          <Link to="/">Главная</Link>
-          <Link to="/about">О приложении</Link>
+          <div className="nav-links">
+            <Link to="/">Главная</Link>
+            <Link to="/about">О приложении</Link>
+          </div>
+          
+          <button 
+            className="theme-toggle-btn" 
+            onClick={toggleTheme}
+            title={theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}
+          >
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
         </nav>
       </header>
 
@@ -122,6 +147,8 @@ const App = () => {
         <Route path="about" element={<About />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      <Flyout />
     </ErrorBoundary>
   );
 };
