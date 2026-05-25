@@ -20,7 +20,7 @@ export const useCharactersQuery = (term: string, page: number) => {
      */
     queryFn: async () => {      
       const response = await fetch(
-        `https://rickandmortyapi.com/api/character/?name=${encodeURIComponent(term)}&page=${page}`
+        `https://rickandmortyapi.com${encodeURIComponent(term)}&page=${page}`
       );
       
       if (!response.ok) {        
