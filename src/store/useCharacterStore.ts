@@ -18,7 +18,7 @@ export const useCharacterStore = create<CharacterState>((set) => ({
 
     if (isAlreadySelected) {     
       return {
-        selectedCharacters: state.selectedCharacters.filter((item) => item.id !== char.id),
+        selectedCharacters: [...state.selectedCharacters, char],
       };
     } else {      
       return {

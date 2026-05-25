@@ -18,25 +18,22 @@ const App = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme, toggleTheme } = useTheme();
   const queryClient = useQueryClient();
- 
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
-  const currentTerm = searchParams.get('name') || localStorage.getItem('search_term') || '';
-  
+
+  // 🎯 ИСПРАВЛЕНО: Добавлен безопасный оператор нулевого слияния ?? вместо потерянных символов
+  const currentPage = parseInt(searchParams.get('page') ?? '1', 10);
+  const currentTerm = searchParams.get('name') ?? localStorage.getItem('search_term') ?? '';
+
   useEffect(() => {
     if (!searchParams.get('page')) {
       setSearchParams({ name: currentTerm, page: '1' }, { replace: true });
     }
   }, [searchParams, setSearchParams, currentTerm]);
 
-  /**
-   * 🛰️ 2. ВНЕДРЕНИЕ TANSTACK QUERY (ВМЕСТО ВСЕХ СТАРЫХ EFFECT И FETCH)
-   * Хук возвращает реактивное состояние асинхронного запроса напрямую из RAM-кэша.
-   * `data` содержит info и results.
-   */
+  // Вызов хука TanStack Query
   const { data, isLoading, isFetching, isError, error } = useCharactersQuery(currentTerm, currentPage);
 
-  // 🔄 3. РУЧНОЕ АННУЛИРОВАНИЕ КЭША
-  const handleGlobalRefresh = async () => {   
+  // Ручное аннулирование кэша в RAM (Функция 4)
+  const handleGlobalRefresh = async () => {
     await queryClient.invalidateQueries();
   };
 
@@ -49,9 +46,6 @@ const App = () => {
     setSearchParams({ name: currentTerm, page: newPage.toString() });
   };
 
-  /**
-   * 🛡️ БЕЗОПАСНАЯ ОБРАБОТКА ОШИБОК    
-   */
   const getErrorMessage = (err: unknown): string => {
     if (err instanceof Error) return err.message;
     return 'Неизвестная ошибка сети';
@@ -83,7 +77,6 @@ const App = () => {
             <section id="center">
               <h1 className="main-title">Rick and Morty Search</h1>
               
-              {/* Группа управления: кнопка генерации искусственной ошибки и кнопка очистки RAM-кэша */}
               <div className="controls-group">
                 <SearchBar onSearch={handleSearch} />
                 <ErrorButton />
@@ -91,13 +84,12 @@ const App = () => {
                   onClick={handleGlobalRefresh} 
                   className="refresh-button"
                   type="button"
-                  title="Очистить кэш в оперативной памяти и перезапросить API"
                 >
                   🔄 Обновить данные
                 </button>
               </div>
 
-              {/* ⚡ НЕБЛОКИРУЮЩИЙ ЛОАДЕР (isFetching): показывается при фоновом обновлении устаревшего кэша */}
+              {/* Фоновый индикатор обновления кэша */}
               {!isLoading && isFetching && (
                 <div className="fetching-indicator" data-testid="fetching-loader">
                   ⚡ Актуализация данных...
@@ -107,7 +99,7 @@ const App = () => {
               <div className="main-content-layout">
                 <div className="results-side" style={{ flex: 1, width: '100%' }}>
                   
-                  {/* 🏛️ КЕЙС 1: ПЕРВИЧНАЯ ЗАГРУЗКА (isLoading - Кэш абсолютно пуст) */}
+                  {/* КЕЙС 1: ПЕРВИЧНАЯ ЗАГРУЗКА (Кэш пуст) */}
                   {isLoading && (
                     <div className="main-loader" data-testid="main-loader">
                       <div className="spinner"></div>
@@ -115,7 +107,7 @@ const App = () => {
                     </div>
                   )}
 
-                  {/* 🏛️ КЕЙС 2: КРИТИЧЕСКАЯ ОШИБКА API (isError) */}
+                  {/* КЕЙС 2: ОШИБКА API */}
                   {isError && (
                     <div className="error-box" data-testid="main-error">
                       <p>⚠️ Ошибка загрузки данных</p>
@@ -123,7 +115,8 @@ const App = () => {
                     </div>
                   )}
 
-                  {/* 🏛️ КЕЙС 3: УСПЕШНОЕ ОТОБРАЖЕНИЕ ДАННЫХ ИЗ КЭША / СЕТИ */}
+                  {/* КЕЙС 3: УСПЕШНЫЙ РЕНДЕР ИЗ RAM ИЛИ СЕТИ */}
+                  {/* 🎯 ИСПРАВЛЕНО: JSX полностью восстановлен, все теги закрыты */}
                   {!isLoading && !isError && data && (
                     <>
                       <div className="card-grid">
@@ -131,7 +124,7 @@ const App = () => {
                           data.results.map((char) => (
                             <Card key={char.id} character={char} />
                           ))
-                        ) : (                          
+                        ) : (
                           <p className="no-results">Никого не нашли. Попробуйте другой поиск!</p>
                         )}
                       </div>
@@ -164,6 +157,7 @@ const App = () => {
             </section>
           }
         >
+          {/* Путь к деталям персонажа через Outlet */}
           <Route path="details/:id" element={<CharacterDetails />} />
         </Route>
         <Route path="about" element={<About />} />
