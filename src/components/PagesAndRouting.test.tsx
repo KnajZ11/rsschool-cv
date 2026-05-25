@@ -5,8 +5,9 @@ import { describe, it, expect, vi } from 'vitest';
 import About from './About';
 import NotFound from './NotFound';
 import CharacterDetails from './CharacterDetails';
+import { renderWithQueryClient } from '../setupTests';
 
-describe('Module 4: Pages and Routing Coverage', () => {
+describe('Module 4 & 5: Pages and Routing Coverage', () => {
   it('должен корректно рендерить страницу About', () => {
     render(<About />);
     expect(screen.getByText(/О приложении/i)).toBeInTheDocument();
@@ -28,9 +29,10 @@ describe('Module 4: Pages and Routing Coverage', () => {
     fireEvent.click(backBtn);
   });
 
- it('должен рендерить лоадер и загружать данные в CharacterDetails при наличии ID', async () => {
+  it('должен рендерить лоадер и загружать данные в CharacterDetails при наличии ID', async () => {    
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
       ok: true,
+      status: 200,
       json: async () => ({
         id: 1,
         name: 'Rick Sanchez',
@@ -38,26 +40,26 @@ describe('Module 4: Pages and Routing Coverage', () => {
         status: 'Alive',
         species: 'Human',
         gender: 'Male',
-        location: { name: 'Earth' }
+        location: { name: 'Earth', url: '' }
       })
     }));
-
-    render(
+    
+    renderWithQueryClient(
       <MemoryRouter initialEntries={['/details/1']}>
         <Routes>
           <Route path="/details/:id" element={<CharacterDetails />} />
         </Routes>
       </MemoryRouter>
     );
-
-    expect(screen.getByText(/Загрузка деталей/i)).toBeInTheDocument();
+ 
+    expect(screen.getByTestId('details-loader')).toBeInTheDocument();
 
     const title = await screen.findByText('Rick Sanchez');
     expect(title).toBeInTheDocument();    
     
-    expect(screen.getByText('Alive')).toBeInTheDocument();
-    expect(screen.getByText('Human')).toBeInTheDocument();
-    expect(screen.getByText('Earth')).toBeInTheDocument();
+    expect(screen.getByText(/Alive/i)).toBeInTheDocument();
+    expect(screen.getByText(/Human/i)).toBeInTheDocument();
+    expect(screen.getByText(/Earth/i)).toBeInTheDocument();
 
     const closeBtn = screen.getByRole('button', { name: /×/i });
     fireEvent.click(closeBtn);
