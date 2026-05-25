@@ -401,7 +401,7 @@ body {
 }
 
 /* ==========================================================================
-   8. ПАГИНАЦИЯ
+   8. ПАГИНАЦИЯ (Идеальное центрирование под твой JSX)
    ========================================================================== */
 .pagination {
   display: flex;
@@ -437,56 +437,14 @@ body {
   font-size: 1rem;
   font-weight: bold;
   color: var(--text-main);
-  min-width: 120px;
+  min-width: 110px;         
   text-align: center;
-  white-space: nowrap;
   display: inline-block;
-}
-
-/* ==========================================================================
-   9. ЦЕНТРИРОВАНИЕ ТЕКСТА «НИЧЕГО НЕ НАЙДЕНО» И ПАГИНАЦИИ (Module 5)
-   ========================================================================== */
-
-.no-results-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 200px;
-  text-align: center;
-  padding: 2rem;
-  box-sizing: border-box;
-}
-
-.no-results-text {
-  font-size: 1.25rem;
-  color: var(--text-dim);
-  font-weight: 500;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  margin: 3rem 0;
-  width: 100%;
-}
-
-.pagination-info {
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--text-main);
-  min-width: 100px;
-  text-align: center;
   white-space: nowrap;
 }
 
 /* ==========================================================================
-   10. АДАПТИВНОСТЬ ДЛЯ СМАРТФОНОВ И ПЛАНШЕТОВ
+   9. АДАТИВНОСТЬ (Responsive Layout)
    ========================================================================== */
 @media (max-width: 900px) {
   .main-content-layout {

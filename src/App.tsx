@@ -18,8 +18,7 @@ const App = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { theme, toggleTheme } = useTheme();
   const queryClient = useQueryClient();
-
-  // 🎯 ИСПРАВЛЕНО: Добавлен безопасный оператор нулевого слияния ?? вместо потерянных символов
+  
   const currentPage = parseInt(searchParams.get('page') ?? '1', 10);
   const currentTerm = searchParams.get('name') ?? localStorage.getItem('search_term') ?? '';
 
@@ -107,16 +106,15 @@ const App = () => {
                     </div>
                   )}
 
-                  {/* КЕЙС 2: ОШИБКА API */}
+                  {/* CASE 2: API ERROR */}
                   {isError && (
                     <div className="error-box" data-testid="main-error">
-                      <p>⚠️ Ошибка загрузки данных</p>
+                      <p>⚠️ Error loading data</p>
                       <span>{getErrorMessage(error)}</span>
                     </div>
                   )}
 
-                  {/* КЕЙС 3: УСПЕШНЫЙ РЕНДЕР ИЗ RAM ИЛИ СЕТИ */}
-                  {/* 🎯 ИСПРАВЛЕНО: JSX полностью восстановлен, все теги закрыты */}
+                  {/* CASE 3: SUCCESSFUL RENDER FROM RAM OR NETWORK */}
                   {!isLoading && !isError && data && (
                     <>
                       <div className="card-grid">
@@ -125,25 +123,25 @@ const App = () => {
                             <Card key={char.id} character={char} />
                           ))
                         ) : (
-                          <p className="no-results">Никого не нашли. Попробуйте другой поиск!</p>
+                          <p className="no-results">No results found. Try a different search!</p>
                         )}
                       </div>
-                      
+
                       <div className="pagination">
                         <button 
                           disabled={currentPage === 1} 
                           onClick={() => handlePageChange(currentPage - 1)}
                           type="button"
                         >
-                          Назад
+                          Previous
                         </button>
-                        <span className="page-info"> Страница {currentPage} </span>
+                        <span className="page-info"> Page {currentPage} </span>
                         <button 
                           disabled={currentPage >= (data.info.pages || 1)}
                           onClick={() => handlePageChange(currentPage + 1)}
                           type="button"
                         >
-                          Вперед
+                          Next
                         </button>
                       </div>
                     </>
@@ -157,7 +155,7 @@ const App = () => {
             </section>
           }
         >
-          {/* Путь к деталям персонажа через Outlet */}
+          {/* Nested Route for character details */}
           <Route path="details/:id" element={<CharacterDetails />} />
         </Route>
         <Route path="about" element={<About />} />

@@ -1,8 +1,8 @@
-//src/components/Card.tsx
+// src/components/Card.tsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCharacterStore } from '../store/useCharacterStore';
-import { type Character } from '../types';
+import type { Character } from '../types';
 
 interface CardProps {
   character: Character;
@@ -11,9 +11,9 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ character }) => {
   const navigate = useNavigate();
   
-  const { selectedCharacters, toggleCharacter } = useCharacterStore();
+  const { selectedCharacters, toggleCharacter } = useCharacterStore();  
   
-  const isSelected = selectedCharacters.some((c) => c.id === character.id);
+  const isSelected = selectedCharacters.some((c: Character) => c.id === character.id);
   
   const handleCheckboxClick = (e: React.MouseEvent) => {  
     e.stopPropagation(); 

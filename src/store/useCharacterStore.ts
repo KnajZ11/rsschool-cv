@@ -1,14 +1,12 @@
 // rsschool-cv\src\store\useCharacterStore.ts
 import { create } from 'zustand';
-import { type Character } from '../types';
+import type { Character } from '../types';
 
 interface CharacterState {
   selectedCharacters: Character[];  
   toggleCharacter: (char: Character) => void; 
-  
   clearSelection: () => void;
 }
-
 
 export const useCharacterStore = create<CharacterState>((set) => ({ 
   selectedCharacters: [],
@@ -18,7 +16,7 @@ export const useCharacterStore = create<CharacterState>((set) => ({
 
     if (isAlreadySelected) {     
       return {
-        selectedCharacters: [...state.selectedCharacters, char],
+        selectedCharacters: state.selectedCharacters.filter((item) => item.id !== char.id),
       };
     } else {      
       return {

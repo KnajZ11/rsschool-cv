@@ -1,6 +1,7 @@
-// rsschool-cv\src\components\Flyout.tsx
+// src/components/Flyout.tsx
 import React from 'react';
 import { useCharacterStore } from '../store/useCharacterStore';
+import type { Character } from '../types';
 
 const Flyout: React.FC = () => {  
   const { selectedCharacters, clearSelection } = useCharacterStore();
@@ -11,8 +12,8 @@ const Flyout: React.FC = () => {
   const handleDownloadCSV = () => {
     if (count === 0) return;
     
-    const headers = ['ID', 'Name', 'Status', 'Species', 'Gender', 'Location'];
-    const rows = selectedCharacters.map((char) => [
+    const headers = ['ID', 'Name', 'Status', 'Species', 'Gender', 'Location'];    
+    const rows = selectedCharacters.map((char: Character) => [
       char.id,
       `"${char.name}"`,
       char.status,
