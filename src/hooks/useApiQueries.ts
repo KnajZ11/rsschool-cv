@@ -10,18 +10,16 @@ import type { ApiResponse, Character } from '../types';
  */
 export const useCharactersQuery = (term: string, page: number) => {
   return useQuery<ApiResponse>({
-    /**
-     * 🔑 queryKey — это уникальный идентификатор запроса в оперативной памяти (RAM).    
-     */
     queryKey: ['characters', term, page],
 
-    /**
-     * 🔄 queryFn — асинхронная функция, которая обязана вернуть промис с данными или выбросить ошибку.
-     */
-    queryFn: async () => {      
-      const response = await fetch(
-        `https://rickandmortyapi.com${encodeURIComponent(term)}&page=${page}`
-      );
+    queryFn: async () => {
+      // 1. Properly construct the URL
+      // Base path: /api/character/
+      // Query params: name=${term}&page=${page}
+      const baseUrl = 'https://rickandmortyapi.com/api/character/';
+      const url = `${baseUrl}?name=${encodeURIComponent(term)}&page=${page}`;
+
+      const response = await fetch(url);
       
       if (!response.ok) {        
         if (response.status === 404) {
