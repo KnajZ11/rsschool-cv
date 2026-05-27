@@ -40,3 +40,4 @@
 2. Запуск dev-сервера: `npm run dev`
 3. Запуск тестов: `npm run test`
 4. Отчет по покрытию: `npm run test:coverage`
+## Module 6: Isolated React Forms Application (2026)
