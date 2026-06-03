@@ -15,22 +15,21 @@ class ErrorBoundary extends Component<Props, State> {
     this.state = { hasError: false };
   }
 
- 
   static getDerivedStateFromError(): State {
     return { hasError: true };
   }
- 
+
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    console.error('Uncaught error:', error, errorInfo);
   }
 
   render() {
-    if (this.state.hasError) {      
+    if (this.state.hasError) {
       return (
         <div style={{ padding: '20px', textAlign: 'center' }}>
           <h2>Что-то пошло не так.</h2>
-          <button 
-            className="counter" 
+          <button
+            className="counter"
             onClick={() => this.setState({ hasError: false })}
           >
             Попробовать снова

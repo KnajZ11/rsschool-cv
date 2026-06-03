@@ -21,11 +21,15 @@ class ErrorButton extends Component<Record<string, never>, ErrorButtonState> {
     }
 
     return (
-      <button 
+      <button
         type="button"
-        className="counter" 
-        onClick={this.handleCrash}        
-        style={{ marginTop: '10px', backgroundColor: '#ff4d4d', color: 'white' }}
+        className="counter"
+        onClick={this.handleCrash}
+        style={{
+          marginTop: '10px',
+          backgroundColor: '#ff4d4d',
+          color: 'white',
+        }}
       >
         Вызвать ошибку
       </button>

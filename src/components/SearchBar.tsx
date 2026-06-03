@@ -13,10 +13,10 @@ interface SearchState {
 class SearchBar extends Component<SearchProps, SearchState> {
   constructor(props: SearchProps) {
     super(props);
-    
+
     // При инициализации сразу проверяем localStorage
     const savedTerm = localStorage.getItem('search_term') || '';
-    
+
     this.state = {
       searchTerm: savedTerm,
     };
@@ -30,10 +30,10 @@ class SearchBar extends Component<SearchProps, SearchState> {
   // Метод, который срабатывает при клике на кнопку Search
   handleSearchClick = () => {
     const term = this.state.searchTerm.trim();
-    
+
     // Сохраняем в память браузера (требование ТЗ)
     localStorage.setItem('search_term', term);
-    
+
     // Передаем значение наверх в компонент App
     this.props.onSearch(term);
   };
@@ -48,9 +48,9 @@ class SearchBar extends Component<SearchProps, SearchState> {
           value={this.state.searchTerm}
           onChange={this.handleInputChange}
         />
-        <button 
-          type="button" 
-          className="counter" 
+        <button
+          type="button"
+          className="counter"
           onClick={this.handleSearchClick}
         >
           Search

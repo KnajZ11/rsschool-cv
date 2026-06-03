@@ -7,7 +7,7 @@ const ThrowError = () => {
   throw new Error('Test Error');
 };
 
-describe('ErrorBoundary', () => { 
+describe('ErrorBoundary', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -23,7 +23,7 @@ describe('ErrorBoundary', () => {
     expect(screen.queryByText(/Что-то пошло не так/i)).not.toBeInTheDocument();
   });
 
-  it('должен отображать запасной UI и кнопку "Попробовать снова" при ошибке', () => {    
+  it('должен отображать запасной UI и кнопку "Попробовать снова" при ошибке', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
@@ -31,18 +31,18 @@ describe('ErrorBoundary', () => {
         <ThrowError />
       </ErrorBoundary>
     );
-    
-    expect(screen.getByText(/Что-то пошло не так/i)).toBeInTheDocument();    
-   
+
+    expect(screen.getByText(/Что-то пошло не так/i)).toBeInTheDocument();
+
     const button = screen.getByRole('button', { name: /попробовать снова/i });
     expect(button).toBeInTheDocument();
-    
+
     expect(consoleSpy).toHaveBeenCalled();
   });
 
-  it('должен сбрасывать состояние ошибки при клике на кнопку "Попробовать снова"', () => {    
+  it('должен сбрасывать состояние ошибки при клике на кнопку "Попробовать снова"', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+
     const TestWrapper = ({ shouldThrow }: { shouldThrow: boolean }) => (
       <ErrorBoundary>
         {shouldThrow ? <ThrowError /> : <div>Исправленный контент</div>}

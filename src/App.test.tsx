@@ -14,7 +14,9 @@ describe('App Component', () => {
     const mockResponse = {
       ok: true,
       json: async () => ({
-        results: [{ id: 1, name: 'Rick Sanchez', species: 'Human', image: 'rick.png' }],
+        results: [
+          { id: 1, name: 'Rick Sanchez', species: 'Human', image: 'rick.png' },
+        ],
       }),
     };
     vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
@@ -31,19 +33,26 @@ describe('App Component', () => {
 
   it('должен отображать лоадер во время загрузки данных', async () => {
     // Задерживаем ответ, чтобы лоадер успел "повиснуть" в DOM
-    vi.mocked(fetch).mockImplementation(() => 
-      new Promise((resolve) => 
-        setTimeout(() => resolve({
-          ok: true,
-          json: async () => ({ results: [] })
-        } as Response), 50)
-      )
+    vi.mocked(fetch).mockImplementation(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(
+            () =>
+              resolve({
+                ok: true,
+                json: async () => ({ results: [] }),
+              } as Response),
+            50
+          )
+        )
     );
 
     render(<App />);
 
     // Проверяем лоадер по тексту из твоего App.tsx
-    expect(screen.getByText(/Ищем персонажей в мультивселенной/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Ищем персонажей в мультивселенной/i)
+    ).toBeInTheDocument();
   });
 
   it('должен отображать сообщение, если результаты не найдены', async () => {
@@ -56,7 +65,9 @@ describe('App Component', () => {
     render(<App />);
 
     // Ждем сообщения об отсутствии результатов
-    const noResults = await screen.findByText(/По вашему запросу никого не нашли/i);
+    const noResults = await screen.findByText(
+      /По вашему запросу никого не нашли/i
+    );
     expect(noResults).toBeInTheDocument();
   });
 });

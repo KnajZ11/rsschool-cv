@@ -9,15 +9,15 @@ export interface ApiResponse {
   };
 }
 
-export const fetchData = async (searchTerm: string): Promise<ApiResponse> => {  
+export const fetchData = async (searchTerm: string): Promise<ApiResponse> => {
   const url = `https://rickandmortyapi.com/api/character/?name=${encodeURIComponent(searchTerm)}`;
-  
+
   const response = await fetch(url);
-  
-  if (!response.ok) {   
+
+  if (!response.ok) {
     if (response.status === 404) return { results: [] };
     throw new Error('Network response was not ok');
   }
-  
+
   return response.json();
 };

@@ -1,5 +1,9 @@
 /*rs-react-app\src\App.css
-/* Базовые стили для центровки контента */
+/* ==========================================================================
+   1. БАЗОВЫЕ И ИСХОДНЫЕ СТИЛИ (МОДУЛИ 1-5)
+   ========================================================================== */
+
+/* Центровка контента */
 #center {
   display: flex;
   flex-direction: column;
@@ -10,6 +14,8 @@
   padding: 40px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%; /* Гарантируем полную ширину для вложенных секций */
+  box-sizing: border-box;
 }
 
 @media (max-width: 1024px) {
@@ -66,7 +72,6 @@
 .error-button {
   background-color: #eb4034 !important;
   color: white !important;
-  margin-top: 10px;
 }
 
 .error-button:hover {
@@ -95,7 +100,9 @@
   border-radius: 12px;
   padding: 16px;
   text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -150,19 +157,6 @@
   max-width: 500px;
 }
 
-/* Адаптив */
-@media (max-width: 600px) {
-  .search-container {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  
-  .card-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-}
-
 /* Декоративные элементы (тики и разделители) */
 .ticks {
   position: relative;
@@ -191,4 +185,89 @@
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   2. НОВЫЕ СТИЛИ ИНТЕГРАЦИИ И УПРАВЛЕНИЯ ФОРМАМИ (МОДУЛЬ 6)
+   ========================================================================== */
+
+/* Контейнер строки управления кнопками вызова форм */
+.controls-layout-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 600px;
+  margin: 8px 0;
+}
+
+/* Стилизация кнопок открытия модальных окон */
+.refresh-button {
+  font-size: 15px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s,
+    transform 0.1s,
+    box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.refresh-button:active {
+  transform: scale(0.98);
+}
+
+.refresh-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent);
+}
+
+/* Индивидуальная секция вывода истории анкет на главной странице */
+.submissions-section {
+  width: 100%;
+  max-width: 1200px;
+  box-sizing: border-box;
+}
+
+.submissions-section h2 {
+  color: var(--text-h);
+  font-family: inherit;
+  margin: 0 0 16px 0;
+  text-align: left;
+}
+
+/* ==========================================================================
+   3. ГЛОБАЛЬНЫЙ МЕДИА-АДАПТИВ (ДЛЯ ВСЕХ МОДУЛЕЙ)
+   ========================================================================== */
+@media (max-width: 600px) {
+  .search-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .controls-layout-row {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .controls-layout-row .error-button {
+    margin-top: 0;
+  }
+
+  .refresh-button {
+    padding: 12px;
+    text-align: center;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
 }

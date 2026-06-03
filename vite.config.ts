@@ -2,14 +2,14 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({  
-  base: '/rsschool-cv/', 
-  
+export default defineConfig({
+  base: '/rsschool-cv/',
+
   plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',
-    setupFiles: './src/setupTests.ts', 
+    setupFiles: './src/setupTests.ts',
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
@@ -18,10 +18,10 @@ export default defineConfig({
         'src/main.tsx',
         'src/vite-env.d.ts',
         'src/**/*.test.tsx',
-        'src/types.ts',   
-        'src/assets/**', 
-        '**/*.css',      
-        '**/*.svg',      
+        'src/types.ts',
+        'src/assets/**',
+        '**/*.css',
+        '**/*.svg',
         '**/*.png',
       ],
       thresholds: {

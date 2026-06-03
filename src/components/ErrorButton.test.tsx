@@ -9,7 +9,7 @@ describe('ErrorButton', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(<ErrorButton />);
-    
+
     // 2. Находим кнопку (убедись, что текст совпадает с тем, что на кнопке)
     const button = screen.getByRole('button');
 
