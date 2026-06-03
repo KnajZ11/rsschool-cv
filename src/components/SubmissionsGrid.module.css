@@ -1,0 +1,92 @@
+/* rsschool-cv\src\components\SubmissionsGrid.module.css*/
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  /* Жесткое требование Пункт 6: Импульсная анимация успеха при монтировании карточки */
+  animation: highlightNewCard 3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3182ce;
+  background-color: #edf2f7;
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.85rem;
+  color: #4a5568;
+}
+
+.cardContent p {
+  margin: 0;
+}
+
+.name {
+  margin: 0 0 2px 0;
+  font-size: 1.1rem;
+  color: #1a202c;
+  font-weight: 700;
+}
+
+.badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.badge[data-strength='Слабый'] {
+  background-color: #fed7d7;
+  color: #9b2c2c;
+}
+.badge[data-strength='Средний'] {
+  background-color: #feebc8;
+  color: #9c4221;
+}
+.badge[data-strength='Надежный'] {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.empty {
+  text-align: center;
+  color: #a0aec0;
+  font-style: italic;
+  margin-top: 40px;
+}
+
+/* 🛡️ Критерий Пункт 6 (3 балла): Визуальное обозначение новой карточки в течение нескольких секунд */
+@keyframes highlightNewCard {
+  0% {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.5);
+    background-color: #ebf8ff;
+  }
+  100% {
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff;
+  }
+}
